@@ -2,6 +2,7 @@ package com.clinic.pet.petclinic.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Setter;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "visits")
 @AllArgsConstructor
 @Data
+@Setter
 public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

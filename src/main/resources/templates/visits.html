@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+    <title>Visits</title>
+</head>
+<body>
+<div th:switch="${visits}">
+    <div style="text-align: center" th:case="*">
+        <h2 >Visits <span th:text="${#lists.size(visits)}"></span></h2>
+        <table th:class="table" >
+            <thead>
+            <tr>
+                <th>Start time</th>
+                <th>Duration</th>
+                <th>Animal</th>
+                <th>Status</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="visit : ${visits}">
+                <td th:text="${visit.startTime}"></td>
+                <td th:text="${visit.duration}"></td>
+                <td th:text="${visit.animal}"></td>
+                <td th:text="${visit.status}"></td>
+                <td th:text="${visit.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
