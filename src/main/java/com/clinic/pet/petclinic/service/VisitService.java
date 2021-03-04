@@ -1,9 +1,13 @@
 package com.clinic.pet.petclinic.service;
 
+import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
+import com.clinic.pet.petclinic.entity.Animal;
 import com.clinic.pet.petclinic.entity.Status;
 import com.clinic.pet.petclinic.entity.Visit;
+import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
 import com.clinic.pet.petclinic.repository.VisitRepository;
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,44 +17,32 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-//@AllArgsConstructor
+@AllArgsConstructor
 @Service
 public class VisitService {
-
-    private VisitRepository visitRepository;
-
-    @Autowired
-    public VisitService(VisitRepository visitRepository) {
-        this.visitRepository = visitRepository;
-    }
+    private final VisitRepository visitRepository;
 
     public List<Visit> getAllVisits() {
         return visitRepository.findAll();
     }
 
-    public boolean delete(int id) {
-        var visit = visitRepository.findById(id);
-        if (visit.isPresent()) {
-            visitRepository.deleteById(visit.get().getId());
-            return true;
-        } else {
-            return false;
+    public void delete(int id) {
+        if (!visitRepository.existsById(id)){
+            throw new VisitNotFoundException("Visit not found: " + id);
         }
+        visitRepository.deleteById(id);
     }
 
-    public boolean createVisit(VisitResponseDto newVisit){
-        if (availableVisit(newVisit)){
-            visitRepository.save(Visit.from(newVisit.getStartTime(),
-                                            newVisit.getDuration(),
-                                            newVisit.getAnimal(),
-                                            newVisit.getStatus(),
-                                            newVisit.getPrice()));
-            return true;
+    public Visit createVisit(VisitRequestDto requestDto){
+        if (!availableVisit(requestDto)){
+            throw new IllegalStateException();
         }
-        return false;
+        var visit = Visit.from(requestDto.getStartTime(),requestDto.getDuration(), requestDto.getAnimal(), requestDto.getStatus(),
+                                     requestDto.getPrice());
+        return visitRepository.save(visit);
     }
 
-    private boolean availableVisit(VisitResponseDto newVisit) {
+    private boolean availableVisit(VisitRequestDto newVisit) {
         List<Visit> visits = getAllVisits();
         LocalDateTime startTime = newVisit.getStartTime();
         LocalDateTime endTime = newVisit.getStartTime().plus(newVisit.getDuration());

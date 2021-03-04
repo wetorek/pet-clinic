@@ -32,8 +32,10 @@ public class Visit {
     protected Visit() {
     }
 
-    public static Visit from(LocalDateTime startTime, Duration duration, Animal animal, Status status, BigDecimal price) {
-        return new Visit(0, startTime, duration, animal, status, price);
+    public static Visit from(LocalDateTime startTime, Duration duration, String animal, String status, BigDecimal price) {
+        var animalEnum = Animal.valueOf(animal);
+        var statusEnum = Status.valueOf(status);
+        return new Visit(0, startTime, duration, animalEnum, statusEnum, price);
     }
 
 

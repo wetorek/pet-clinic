@@ -7,8 +7,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Data
-public class VisitResponseDto {
-    private final int id;
+public class VisitRequestDto {
     private final LocalDateTime startTime;
     private final Duration duration;
     private final String animal;
