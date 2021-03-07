@@ -1,8 +1,8 @@
 package com.clinic.pet.petclinic.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Setter;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
@@ -11,16 +11,16 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 
-@Entity
-@Table(name = "visits")
+@Entity(name = "visits")
 @AllArgsConstructor
 @Data
-@Setter
+@Builder
 public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private LocalDateTime startTime;
+    //Duration is in minutes
     private Duration duration;
     @Enumerated(EnumType.STRING)
     private Animal animal;
@@ -35,7 +35,13 @@ public class Visit {
     public static Visit from(LocalDateTime startTime, Duration duration, String animal, String status, BigDecimal price) {
         var animalEnum = Animal.valueOf(animal);
         var statusEnum = Status.valueOf(status);
-        return new Visit(0, startTime, duration, animalEnum, statusEnum, price);
+        return Visit.builder()
+                .startTime(startTime)
+                .duration(duration)
+                .animal(animalEnum)
+                .status(statusEnum)
+                .price(price)
+                .build();
     }
 
 
