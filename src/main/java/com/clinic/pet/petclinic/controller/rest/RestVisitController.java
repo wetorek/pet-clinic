@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/visits")
 @AllArgsConstructor
-class VisitRestController {
+class RestVisitController {
     private final Mapper<Visit, VisitResponseDto> mapper;
     private final VisitService visitService;
 
