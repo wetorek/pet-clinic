@@ -7,7 +7,6 @@ import com.clinic.pet.petclinic.service.VisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/visits")
 @AllArgsConstructor
-class VisitController {
+class VisitRestController {
     private final Mapper<Visit, VisitResponseDto> mapper;
     private final VisitService visitService;
 
