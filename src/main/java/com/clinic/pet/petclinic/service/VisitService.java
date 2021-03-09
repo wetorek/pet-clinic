@@ -14,4 +14,6 @@ public interface VisitService {
     Visit createVisit(VisitRequestDto requestDto);
 
     void delete(int id);
+
+    Visit updateVisit(int id, VisitRequestDto requestDto);
 }

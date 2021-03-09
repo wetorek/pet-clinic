@@ -1,6 +1,7 @@
 package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
+import com.clinic.pet.petclinic.entity.Animal;
 import com.clinic.pet.petclinic.entity.Status;
 import com.clinic.pet.petclinic.entity.Visit;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
@@ -35,7 +36,7 @@ public class CustomVisitService implements VisitService {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
         }
-        var visit = Visit.from(requestDto.getStartTime(), requestDto.getDuration(), requestDto.getAnimal(), requestDto.getStatus(), requestDto.getPrice());
+        var visit = Visit.from(requestDto.getStartTime(), requestDto.getDurationInLong(), requestDto.getAnimal(), requestDto.getStatus(), requestDto.getPrice());
         var createdVisit = visitRepository.save(visit);
         log.info("Visit created id: {}", createdVisit.getId());
         return createdVisit;
@@ -49,16 +50,60 @@ public class CustomVisitService implements VisitService {
         visitRepository.deleteById(id);
     }
 
-    private boolean changeStatus(int id, Status newStatus) { //todo co to
-        var visit = getVisitById(id);
-        if (visit.isPresent()) {
-            if (correctStatus(visit.get().getStatus(), newStatus)) {
-                visit.get().setStatus(newStatus);
-                return true;
-            }
-            return false;
+    public Visit updateVisit(int id, VisitRequestDto requestDto) {
+        if (!visitRepository.existsById(id)) {
+            log.error("Visit is not found: {}", id);
+            throw new VisitNotFoundException("Visit not found: " + id);
         }
-        return false;
+        Visit visit = visitRepository.getOne(id);
+        changeTimeVisit(visit, requestDto);
+        changeStatus(visit,requestDto);
+        changeAnimal(visit, requestDto);
+        changePrice(visit, requestDto);
+
+        return visit;
+    }
+
+    private void changePrice(Visit visit, VisitRequestDto requestDto) {
+        if (visit.getPrice().equals(requestDto.getPrice())){
+            visit.setPrice(requestDto.getPrice());
+        }
+    }
+
+    private void changeAnimal(Visit visit, VisitRequestDto requestDto) {
+        if (!visit.getAnimal().toString().equals(requestDto.getAnimal())){
+            visit.setAnimal(Animal.valueOf(requestDto.getAnimal()));
+        }
+    }
+
+    private void changeTimeVisit(Visit visit, VisitRequestDto requestDto){
+        if (visit.getStartTime() != requestDto.getStartTime()) {
+            if (!checkIfVisitOverlaps(requestDto)){
+                visit.setStartTime(requestDto.getStartTime());
+            }else{
+                log.error("Visit is overlapping");
+                throw new IllegalStateException("This visit is overlapping");
+            }
+        }
+        if (visit.getDuration() != requestDto.getDuration()) {
+            if (!checkIfVisitOverlaps(requestDto)){
+                visit.setDuration(requestDto.getDurationInLong());
+            }else {
+                log.error("Visit is overlapping");
+                throw new IllegalStateException("This visit is overlapping");
+            }
+        }
+    }
+
+    private void changeStatus(Visit visit, VisitRequestDto requestDto) {
+        if (!visit.getStatus().toString().equals(requestDto.getStatus())) {
+            if (!correctStatus(visit.getStatus(), Status.valueOf(requestDto.getStatus()))){
+                log.error("Status cannot be changed");
+                throw new IllegalStateException("Status cannot be changed");
+            }else {
+                visit.setStatus(Status.valueOf(requestDto.getStatus()));
+            }
+        }
     }
 
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {

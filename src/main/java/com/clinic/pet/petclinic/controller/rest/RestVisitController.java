@@ -46,5 +46,10 @@ class RestVisitController {
         visitService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+    @PatchMapping("/{id}")
+    ResponseEntity<VisitResponseDto> updateVisit(@PathVariable @Min(1)  int id, @Valid @RequestBody VisitRequestDto visitRequestDto ){
+        var result = visitService.updateVisit(id, visitRequestDto);
+        var mapped = mapper.mapToDto(result);
+        return new ResponseEntity<>(mapped, HttpStatus.ACCEPTED);
+    }
 }

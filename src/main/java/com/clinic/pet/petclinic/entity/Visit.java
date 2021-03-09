@@ -21,7 +21,7 @@ public class Visit {
     private int id;
     private LocalDateTime startTime;
     //Duration is in minutes
-    private Duration duration;
+    private long duration;
     @Enumerated(EnumType.STRING)
     private Animal animal;
     @Enumerated(EnumType.STRING)
@@ -32,7 +32,7 @@ public class Visit {
     protected Visit() {
     }
 
-    public static Visit from(LocalDateTime startTime, Duration duration, String animal, String status, BigDecimal price) {
+    public static Visit from(LocalDateTime startTime, long duration, String animal, String status, BigDecimal price) {
         var animalEnum = Animal.valueOf(animal);
         var statusEnum = Status.valueOf(status);
         return Visit.builder()
@@ -44,5 +44,7 @@ public class Visit {
                 .build();
     }
 
-
+    public Duration getDuration() {
+        return Duration.ofMinutes(duration);
+    }
 }
