@@ -1,19 +1,17 @@
 package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
-import com.clinic.pet.petclinic.entity.Visit;
+import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface VisitService {
-    List<Visit> getAllVisits();
+    List<VisitResponseDto> getAllVisits();
 
-    Optional<Visit> getVisitById(int id);
+    Optional<VisitResponseDto> getVisitById(int id);
 
-    Visit createVisit(VisitRequestDto requestDto);
+    VisitResponseDto createVisit(VisitRequestDto requestDto);
 
     void delete(int id);
-
-    Visit updateVisit(int id, VisitRequestDto requestDto);
 }

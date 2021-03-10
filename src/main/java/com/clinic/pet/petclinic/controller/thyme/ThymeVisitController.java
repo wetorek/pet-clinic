@@ -16,8 +16,7 @@ public class ThymeVisitController {
 
     @GetMapping
     public String getAllVisits(Model model) {
-
-        //todo implement
-        return "";
+        model.addAttribute("visits", visitService.getAllVisits());
+        return "visits";
     }
 }

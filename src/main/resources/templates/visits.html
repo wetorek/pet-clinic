@@ -10,10 +10,11 @@
 <body>
 <div th:switch="${visits}">
     <div style="text-align: center" th:case="*">
-        <h2 >Visits <span th:text="${#lists.size(visits)}"></span></h2>
-        <table th:class="table" >
+        <h2>Visits <span th:text="${#lists.size(visits)}"></span></h2>
+        <table th:class="table">
             <thead>
             <tr>
+                <th>Id</th>
                 <th>Start time</th>
                 <th>Duration</th>
                 <th>Animal</th>
@@ -23,6 +24,7 @@
             </thead>
             <tbody>
             <tr th:each="visit : ${visits}">
+                <td th:text="${visit.id}"></td>
                 <td th:text="${visit.startTime}"></td>
                 <td th:text="${visit.duration}"></td>
                 <td th:text="${visit.animal}"></td>

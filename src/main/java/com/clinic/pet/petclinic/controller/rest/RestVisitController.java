@@ -16,19 +16,16 @@ import java.util.List;
 @RequestMapping("/api/visits")
 @AllArgsConstructor
 class RestVisitController {
-    private final VisitMapper mapper;
     private final VisitService visitService;
 
     @GetMapping
     public List<VisitResponseDto> getAllVisits() {
-        var visits = visitService.getAllVisits();
-        return mapper.mapListToDto(visits);
+        return visitService.getAllVisits();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VisitResponseDto> getVisit(@PathVariable @Min(1) int id) {
         return visitService.getVisitById(id)
-                .map(mapper::mapToDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -36,19 +33,12 @@ class RestVisitController {
     @PostMapping
     ResponseEntity<VisitResponseDto> createVisit(@Valid @RequestBody VisitRequestDto visitRequestDto) {
         var result = visitService.createVisit(visitRequestDto);
-        var mapped = mapper.mapToDto(result);
-        return new ResponseEntity<>(mapped, HttpStatus.CREATED);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable @Min(1) int id) {
         visitService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-    @PatchMapping("/{id}")
-    ResponseEntity<VisitResponseDto> updateVisit(@PathVariable @Min(1)  int id, @Valid @RequestBody VisitRequestDto visitRequestDto ){
-        var result = visitService.updateVisit(id, visitRequestDto);
-        var mapped = mapper.mapToDto(result);
-        return new ResponseEntity<>(mapped, HttpStatus.ACCEPTED);
     }
 }

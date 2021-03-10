@@ -27,9 +27,4 @@ public class VisitRequestDto {
     @DecimalMin("1")
     @DecimalMax("10000")
     private final BigDecimal price;
-
-    public long getDurationInLong() {
-        return duration.toMinutes();
-    }
-
 }

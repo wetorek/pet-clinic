@@ -1,4 +1,4 @@
-package com.clinic.pet.petclinic.controller.rest;
+package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
 import com.clinic.pet.petclinic.entity.Visit;

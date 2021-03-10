@@ -41,18 +41,10 @@ public class RestExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
         return ex.getBindingResult().getAllErrors().stream()
-                .collect(HashMap::new,
+                .collect(
+                        HashMap::new,
                         (m, v) -> m.put(((FieldError) v).getField(), v.getDefaultMessage()),
-                        HashMap::putAll);
-//        Collectors.toMap( error -> ((FieldError) error).getField() , DefaultMessageSourceResolvable::getDefaultMessage)
-
-
-//                Map<String, String> errors = new HashMap<>();
-//                .forEach((error) -> {
-//            String fieldName = ((FieldError) error).getField();
-//            String errorMessage = error.getDefaultMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//        return errors;
+                        HashMap::putAll
+                );
     }
 }
