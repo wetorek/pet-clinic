@@ -2,7 +2,6 @@ package com.clinic.pet.petclinic.controller.rest;
 
 import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
-import com.clinic.pet.petclinic.entity.Visit;
 import com.clinic.pet.petclinic.service.VisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/visits")
 @AllArgsConstructor
 class RestVisitController {
-    private final Mapper<Visit, VisitResponseDto> mapper;
+    private final VisitMapper mapper;
     private final VisitService visitService;
 
     @GetMapping

@@ -2,28 +2,15 @@ package com.clinic.pet.petclinic.controller.rest;
 
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
 import com.clinic.pet.petclinic.entity.Visit;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-public class VisitMapper implements Mapper<Visit, VisitResponseDto> {
+@Mapper(componentModel = "spring")
+public interface VisitMapper {
 
-    public VisitResponseDto mapToDto(Visit visit) {
-        return VisitResponseDto.builder()
-                .id(visit.getId())
-                .duration(visit.getDuration())
-                .animal(visit.getAnimal().toString())
-                .price(visit.getPrice())
-                .startTime(visit.getStartTime())
-                .status(visit.getStatus().toString())
-                .build();
-    }
+    VisitResponseDto mapToDto(Visit visit);
 
-    public List<VisitResponseDto> mapListToDto(List<Visit> visits) {
-        return visits.stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toUnmodifiableList());
-    }
+    List<VisitResponseDto> mapListToDto(Collection<Visit> visits);
 }
