@@ -54,7 +54,7 @@ public class CustomVisitService implements VisitService {
 
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {
         LocalDateTime endTime = requestDto.getStartTime().plus(requestDto.getDuration());
-        return false; //visitRepository.existOverlapping(requestDto.getStartTime(), endTime); //todo change
+        return visitRepository.existOverlapping(requestDto.getStartTime(), endTime).size()!=0;
     }
 
     /*private boolean checkifvisitoverlaps(VisitRequestDto requestDto) { //todo stara wersja z pobraniem wszystkich wizyt

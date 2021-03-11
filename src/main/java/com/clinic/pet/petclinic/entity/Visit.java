@@ -1,8 +1,10 @@
 package com.clinic.pet.petclinic.entity;
 
+import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @Builder
+@TypeDef(typeClass = PostgreSQLIntervalType.class, defaultForType = Duration.class)
 public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +26,7 @@ public class Visit {
     @NotNull
     private LocalDateTime startTime;
     @NotNull
+    @Column(columnDefinition = "interval")
     private Duration duration;
     @NotNull
     @Enumerated(EnumType.STRING)
