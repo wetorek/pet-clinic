@@ -1,0 +1,31 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+      temp:
+        use_jdbc_metadata_defaults: false
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:postgresql://ec2-54-247-158-179.eu-west-1.compute.amazonaws.com:5432/dd6052ra9fn5i5
+    username: yentaqbdjqzspj
+    password: 814cf7954133e0bb6349c7844a18ea57e04a44d4bdc61f7d58bc5a2a49470714
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
