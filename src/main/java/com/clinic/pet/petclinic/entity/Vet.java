@@ -8,11 +8,11 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-@Table(name = "customers")
+@Table(name = "vets")
 @Entity
 @Data
 @AllArgsConstructor
-public class Customer {
+public class Vet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,13 +20,15 @@ public class Customer {
     private String name;
     @NotNull
     private String surname;
+    @NotNull
+    private String availability;
+    @Lob
+    private Byte[] image;
 
-    @OneToMany(mappedBy = "owner")
-    private List<Animal> animalList;
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "vet")
     private List<Visit> visitList;
 
     @PersistenceConstructor
-    public Customer() {
+    public Vet() {
     }
 }

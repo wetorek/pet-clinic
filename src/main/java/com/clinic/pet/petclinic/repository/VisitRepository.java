@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface VisitRepository extends JpaRepository<Visit, Integer> {
 
-    @Query("select v from visits v where (v.startTime <= :timeFrom and (v.startTime + v.duration) > :timeFrom) or (v.startTime < :timeTo and (v.startTime + v.duration) >= :timeTo)")
+    @Query("select v from Visit v where (v.startTime <= :timeFrom and (v.startTime + v.duration) > :timeFrom) or (v.startTime < :timeTo and (v.startTime + v.duration) >= :timeTo)")
     List<Visit> existOverlapping(LocalDateTime timeFrom, LocalDateTime timeTo);
 
 }

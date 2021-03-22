@@ -2,7 +2,6 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
-import com.clinic.pet.petclinic.entity.Visit;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
 import com.clinic.pet.petclinic.repository.VisitRepository;
 import lombok.AllArgsConstructor;
@@ -38,8 +37,8 @@ public class CustomVisitService implements VisitService {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
         }
-        var visit = Visit.from(requestDto.getStartTime(), requestDto.getDuration(), requestDto.getAnimal(), requestDto.getStatus(), requestDto.getPrice(), requestDto.getCustomerID());
-        var createdVisit = visitRepository.save(visit);
+//        var visit = Visit.from(requestDto.getStartTime(), requestDto.getDuration(), requestDto.getAnimal(), requestDto.getStatus(), requestDto.getPrice(), requestDto.getCustomerID());
+        var createdVisit = visitRepository.save(null);
         log.info("Visit created id: {}", createdVisit.getId());
         return mapper.mapToDto(createdVisit);
     }
