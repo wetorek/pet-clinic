@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @Data
 @AllArgsConstructor
 @Builder
-public class Client {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,11 +26,11 @@ public class Client {
     private String surname;
 
     @PersistenceConstructor
-    public Client() {
+    public Customer() {
     }
 
-    public static Client from(String name, String surname) {
-        return Client.builder()
+    public static Customer from(String name, String surname) {
+        return Customer.builder()
                 .name(name)
                 .surname(surname)
                 .build();

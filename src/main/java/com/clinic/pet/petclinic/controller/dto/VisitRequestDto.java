@@ -7,6 +7,7 @@ import org.springframework.boot.convert.DurationUnit;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -27,4 +28,6 @@ public class VisitRequestDto {
     @DecimalMin("1")
     @DecimalMax("10000")
     private final BigDecimal price;
+    @Min(value = 1)
+    private final int customerID;
 }

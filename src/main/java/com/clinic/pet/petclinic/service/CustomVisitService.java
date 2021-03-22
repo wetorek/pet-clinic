@@ -38,7 +38,7 @@ public class CustomVisitService implements VisitService {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
         }
-        var visit = Visit.from(requestDto.getStartTime(), requestDto.getDuration(), requestDto.getAnimal(), requestDto.getStatus(), requestDto.getPrice());
+        var visit = Visit.from(requestDto.getStartTime(), requestDto.getDuration(), requestDto.getAnimal(), requestDto.getStatus(), requestDto.getPrice(), requestDto.getCustomerID());
         var createdVisit = visitRepository.save(visit);
         log.info("Visit created id: {}", createdVisit.getId());
         return mapper.mapToDto(createdVisit);

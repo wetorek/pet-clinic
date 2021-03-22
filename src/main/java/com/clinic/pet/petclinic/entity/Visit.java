@@ -8,6 +8,7 @@ import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -36,12 +37,16 @@ public class Visit {
     private Status status;
     @NotNull
     private BigDecimal price;
+    private String description;
+    @NotNull
+    @Min(value = 1)
+    private int customerID;
 
     @PersistenceConstructor
     protected Visit() {
     }
 
-    public static Visit from(LocalDateTime startTime, Duration duration, String animal, String status, BigDecimal price) {
+    public static Visit from(LocalDateTime startTime, Duration duration, String animal, String status, BigDecimal price, int customerID) {
         var animalEnum = AnimalSpecies.valueOf(animal);
         var statusEnum = Status.valueOf(status);
         return Visit.builder()
@@ -50,6 +55,8 @@ public class Visit {
                 .animal(animalEnum)
                 .status(statusEnum)
                 .price(price)
+                .description("")
+                .customerID(customerID)
                 .build();
     }
 }
