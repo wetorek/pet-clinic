@@ -39,15 +39,15 @@ public class CustomAnimalService implements AnimalService{
         log.info("adding a new animal");
         Animal animal = null; //todo : tworzenie nowego
         log.info("created new animal id: ");
-        animalRepository.save(animal);
-        return mapper.mapToDto(animal);
+        var createdAnimal = animalRepository.save(animal);
+        return mapper.mapToDto(createdAnimal);
     }
 
     @Override
     public void delete(int id) {
         if (!animalRepository.existsById(id)) {
             log.error("Animal is not found: {}", id);
-//   todo:         throw new AnimalNotFoundException("Visit not found: " + id);
+//   todo:         throw new AnimalNotFoundException("Animal not found: " + id);
         }
         animalRepository.deleteById(id);
     }
