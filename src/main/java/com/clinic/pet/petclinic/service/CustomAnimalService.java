@@ -3,6 +3,7 @@ package com.clinic.pet.petclinic.service;
 import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.entity.Animal;
+import com.clinic.pet.petclinic.exceptions.AnimalNotFoundException;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
 import com.clinic.pet.petclinic.repository.AnimalRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 @Slf4j
-public class CustomAnimalService implements AnimalService{
+public class CustomAnimalService implements AnimalService {
 
     private final AnimalRepository animalRepository;
     private final AnimalMapper mapper;
@@ -47,7 +48,7 @@ public class CustomAnimalService implements AnimalService{
     public void delete(int id) {
         if (!animalRepository.existsById(id)) {
             log.error("Animal is not found: {}", id);
-//   todo:         throw new AnimalNotFoundException("Animal not found: " + id);
+            throw new AnimalNotFoundException("Animal not found: " + id);
         }
         animalRepository.deleteById(id);
     }
