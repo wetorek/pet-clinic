@@ -30,7 +30,7 @@ public class Visit {
     private Duration duration;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Animal animal;
+    private AnimalSpecies animal;
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -42,7 +42,7 @@ public class Visit {
     }
 
     public static Visit from(LocalDateTime startTime, Duration duration, String animal, String status, BigDecimal price) {
-        var animalEnum = Animal.valueOf(animal);
+        var animalEnum = AnimalSpecies.valueOf(animal);
         var statusEnum = Status.valueOf(status);
         return Visit.builder()
                 .startTime(startTime)
