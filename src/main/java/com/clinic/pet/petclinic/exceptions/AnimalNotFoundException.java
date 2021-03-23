@@ -1,8 +1,7 @@
 package com.clinic.pet.petclinic.exceptions;
 
-public class AnimalNotFoundException extends RuntimeException{
+public class AnimalNotFoundException extends ResourceNotFoundException {
     public AnimalNotFoundException() {
-        super();
     }
 
     public AnimalNotFoundException(String message) {
@@ -17,7 +16,7 @@ public class AnimalNotFoundException extends RuntimeException{
         super(cause);
     }
 
-    protected AnimalNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AnimalNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

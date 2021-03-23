@@ -31,14 +31,14 @@ class RestVisitController {
     }
 
     @PostMapping
-    ResponseEntity<VisitResponseDto> createVisit(@Valid @RequestBody VisitRequestDto visitRequestDto) {
-        var result = visitService.createVisit(visitRequestDto);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    VisitResponseDto createVisit(@Valid @RequestBody VisitRequestDto visitRequestDto) {
+        return visitService.createVisit(visitRequestDto);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable @Min(1) int id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void delete(@PathVariable @Min(1) int id) {
         visitService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

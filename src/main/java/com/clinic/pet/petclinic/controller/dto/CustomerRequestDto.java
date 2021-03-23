@@ -4,11 +4,9 @@ import com.sun.istack.NotNull;
 import lombok.Data;
 
 @Data
-public class CustomerRequestDto{    //TODO: co dodajemy do bazy najpierw customer czy zwierzatko, robie narazie ze klienta
-
+public class CustomerRequestDto {
     @NotNull
     private final String name;
     @NotNull
     private final String surname;
-
 }

@@ -1,7 +1,5 @@
 package com.clinic.pet.petclinic.service;
 
-import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
-import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
 

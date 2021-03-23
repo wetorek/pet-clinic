@@ -3,6 +3,9 @@ package com.clinic.pet.petclinic.service;
 import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
+import com.clinic.pet.petclinic.repository.AnimalRepository;
+import com.clinic.pet.petclinic.repository.CustomerRepository;
+import com.clinic.pet.petclinic.repository.VetRepository;
 import com.clinic.pet.petclinic.repository.VisitRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +18,11 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 @Slf4j
-public class CustomVisitService implements VisitService {
+public class LoggedVisitService implements VisitService {
     private final VisitRepository visitRepository;
+    private final AnimalRepository animalRepository;
+    private final CustomerRepository customerRepository;
+    private final VetRepository vetRepository;
     private final VisitMapper mapper;
 
     public List<VisitResponseDto> getAllVisits() {
@@ -37,8 +43,14 @@ public class CustomVisitService implements VisitService {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
         }
-//   todo:     var visit = Visit.from(requestDto.getStartTime(), requestDto.getDuration(), requestDto.getAnimal(), requestDto.getStatus(), requestDto.getPrice(), requestDto.getCustomerID());
-        var createdVisit = visitRepository.save(null);
+        var customer = customerRepository.findById(requestDto.getCustomerID())
+                .orElseThrow(() -> new IllegalArgumentException("Customer does not exist"));
+        var animal = animalRepository.findById(requestDto.getAnimalId())
+                .orElseThrow(() -> new IllegalArgumentException("Animal does not exist"));
+        var vet = vetRepository.findById(1)
+                .orElseThrow(() -> new IllegalArgumentException("Vet does not exist"));
+        var visit = mapper.mapToEntity(requestDto, animal, vet, customer);
+        var createdVisit = visitRepository.save(visit);
         log.info("Visit created id: {}", createdVisit.getId());
         return mapper.mapToDto(createdVisit);
     }

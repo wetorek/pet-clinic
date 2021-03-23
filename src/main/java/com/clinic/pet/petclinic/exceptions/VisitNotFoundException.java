@@ -1,7 +1,6 @@
 package com.clinic.pet.petclinic.exceptions;
 
-public class VisitNotFoundException extends RuntimeException {
-
+public class VisitNotFoundException extends ResourceNotFoundException {
     public VisitNotFoundException() {
     }
 

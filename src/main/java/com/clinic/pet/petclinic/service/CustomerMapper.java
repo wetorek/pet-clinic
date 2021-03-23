@@ -1,5 +1,6 @@
 package com.clinic.pet.petclinic.service;
 
+import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
 import com.clinic.pet.petclinic.entity.Customer;
 import org.mapstruct.Mapper;
@@ -12,4 +13,6 @@ public interface CustomerMapper {
     CustomerResponseDto mapToDto(Customer customer);
 
     List<CustomerResponseDto> mapListToDto(List<Customer> customers);
+
+    Customer mapToEntity(CustomerRequestDto requestDto);
 }

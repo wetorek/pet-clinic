@@ -14,8 +14,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 @Slf4j
-public class DefaultCustomerService implements CustomerService {
-
+public class LoggedCustomerService implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper mapper;
 
@@ -36,8 +35,8 @@ public class DefaultCustomerService implements CustomerService {
     @Override
     public CustomerResponseDto addCustomer(CustomerRequestDto requestDto) {
         log.info("Creating a customer");
-// todo:   var customer = Cusomer.from;
-        var createdCustomer = customerRepository.save(null);
+        var customer = mapper.mapToEntity(requestDto);
+        var createdCustomer = customerRepository.save(customer);
         log.info("Customer created id: ");
         return mapper.mapToDto(createdCustomer);
     }

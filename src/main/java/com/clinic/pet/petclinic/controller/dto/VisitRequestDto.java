@@ -22,7 +22,7 @@ public class VisitRequestDto {
     @DurationMax(hours = 6)
     private final Duration duration;
     @NotBlank(message = "Animal type is required")
-    private final String animal;
+    private final int animalId;
     @NotBlank(message = "Visit status is required")
     private final String status;
     @DecimalMin("1")
@@ -30,4 +30,5 @@ public class VisitRequestDto {
     private final BigDecimal price;
     @Min(value = 1)
     private final int customerID;
+    private String description;
 }

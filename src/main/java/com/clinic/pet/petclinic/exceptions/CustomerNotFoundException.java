@@ -1,8 +1,7 @@
 package com.clinic.pet.petclinic.exceptions;
 
-public class CustomerNotFoundException extends RuntimeException{
+public class CustomerNotFoundException extends ResourceNotFoundException {
     public CustomerNotFoundException() {
-        super();
     }
 
     public CustomerNotFoundException(String message) {
@@ -17,7 +16,7 @@ public class CustomerNotFoundException extends RuntimeException{
         super(cause);
     }
 
-    protected CustomerNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public CustomerNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

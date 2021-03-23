@@ -1,7 +1,7 @@
 package com.clinic.pet.petclinic.controller.rest;
 
 import com.clinic.pet.petclinic.exceptions.ErrorResponse;
-import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
+import com.clinic.pet.petclinic.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class RestExceptionAdvice {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(IllegalStateException.class)
-    ErrorResponse handleConflict(RuntimeException ex) {
+    ErrorResponse handleConflict(IllegalStateException ex) {
         return ErrorResponse.builder()
                 .errorCode("Illegal operation performed")
                 .status(HttpStatus.CONFLICT.value())
@@ -27,10 +27,10 @@ public class RestExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(VisitNotFoundException.class)
-    ErrorResponse handleVisitNotFound(RuntimeException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    ErrorResponse handleVisitNotFound(ResourceNotFoundException ex) {
         return ErrorResponse.builder()
-                .errorCode("Visit not found")
+                .errorCode("Resource not found")
                 .status(HttpStatus.NOT_FOUND.value())
                 .timestamp(LocalDateTime.now())
                 .errorMessage(ex.getMessage())

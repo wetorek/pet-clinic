@@ -14,7 +14,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class Animal {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,7 +22,7 @@ public class Animal {
     private LocalDate dateOfBirth;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private AnimalSpecies animalSpecies;
+    private AnimalSpecies species;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
@@ -35,14 +34,4 @@ public class Animal {
     @PersistenceConstructor
     public Animal() {
     }
-
-//    public static Animal from(String name, LocalDate dateOfBirth, String animalSpecies, int ownerID) {
-//        var animalEnum = AnimalSpecies.valueOf(animalSpecies);
-//        return Animal.builder()
-//                .name(name)
-//                .dateOfBirth(dateOfBirth)
-//                .animalSpecies(animalEnum)
-//                .ownerID(ownerID)
-//                .build();
-//    }
 }

@@ -2,7 +2,6 @@ package com.clinic.pet.petclinic.controller.rest;
 
 import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
-import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
 import com.clinic.pet.petclinic.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,21 +24,21 @@ public class RestCustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponseDto> getCustomer(@PathVariable @Min(1) int id){
+    public ResponseEntity<CustomerResponseDto> getCustomer(@PathVariable @Min(1) int id) {
         return customerService.getCustomerById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    ResponseEntity<CustomerResponseDto> createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto){
-        var result = customerService.addCustomer(customerRequestDto);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
+        return customerService.addCustomer(customerRequestDto);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable @Min(1) int id){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void delete(@PathVariable @Min(1) int id) {
         customerService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

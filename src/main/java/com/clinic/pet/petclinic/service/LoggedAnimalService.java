@@ -4,8 +4,8 @@ import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.entity.Animal;
 import com.clinic.pet.petclinic.exceptions.AnimalNotFoundException;
-import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
 import com.clinic.pet.petclinic.repository.AnimalRepository;
+import com.clinic.pet.petclinic.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 @Slf4j
-public class CustomAnimalService implements AnimalService {
-
+public class LoggedAnimalService implements AnimalService {
+    private final CustomerRepository customerRepository;
     private final AnimalRepository animalRepository;
     private final AnimalMapper mapper;
 
@@ -38,7 +38,9 @@ public class CustomAnimalService implements AnimalService {
     @Override
     public AnimalResponseDto addAnimal(AnimalRequestDto requestDto) {
         log.info("adding a new animal");
-        Animal animal = null; //todo : tworzenie nowego
+        var owner = customerRepository.findById(requestDto.getOwnerID())
+                .orElseThrow(() -> new IllegalArgumentException("Owner does not exist"));
+        Animal animal = mapper.mapToEntity(requestDto, owner);
         log.info("created new animal id: ");
         var createdAnimal = animalRepository.save(animal);
         return mapper.mapToDto(createdAnimal);
