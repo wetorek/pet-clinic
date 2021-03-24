@@ -2,6 +2,8 @@ package com.clinic.pet.petclinic.controller.rest;
 
 import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
 import com.clinic.pet.petclinic.service.VisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,16 @@ class RestVisitController {
     @ResponseStatus(HttpStatus.CREATED)
     VisitResponseDto createVisit(@Valid @RequestBody VisitRequestDto visitRequestDto) {
         return visitService.createVisit(visitRequestDto);
+    }
+
+    @PatchMapping(path = "/{id}/status")
+    public VisitResponseDto changeVisitStatus(@PathVariable @Min(1) int id, @RequestBody VisitSetStatusRequestDto requestDto) {
+        return visitService.changeVisitStatus(id, requestDto);
+    }
+
+    @PatchMapping(path = "/{id}/description")
+    public VisitResponseDto changeDescriptionVisit(@PathVariable @Min(1) int id, @RequestBody VisitSetDescriptionRequestDto requestDto) {
+        return visitService.changeDescription(id, requestDto);
     }
 
     @DeleteMapping("/{id}")

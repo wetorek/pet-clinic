@@ -2,6 +2,9 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
+import com.clinic.pet.petclinic.entity.Status;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
 import com.clinic.pet.petclinic.repository.AnimalRepository;
 import com.clinic.pet.petclinic.repository.CustomerRepository;
@@ -12,11 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.chrono.ChronoLocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,9 +47,9 @@ public class LoggedVisitService implements VisitService {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
         }
-        LocalDateTime nowDateTime = LocalDateTime.now();
-        if(requestDto.getStartTime().isBefore(nowDateTime) ||
-                requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)))){
+        LocalDateTime nowDateTime = LocalDateTime.now();        //todo spróbuj sobie przetestować coś takiego (wstrzykiwanie clocka)
+        if (requestDto.getStartTime().isBefore(nowDateTime) ||    //TODO nie możemy tego dać do powyższej metody sprawdzającej? a jeżeli nie to do oddzielnej
+                requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)))) { //TODO extract it so separate method and throw exception
             log.error("Visit cannot be planned on " + requestDto.getStartTime());
         }
         var customer = customerRepository.findById(requestDto.getCustomerID())
@@ -71,6 +70,26 @@ public class LoggedVisitService implements VisitService {
             throw new VisitNotFoundException("Visit not found: " + id);
         }
         visitRepository.deleteById(id);
+    }
+
+    public VisitResponseDto changeDescription(int id, VisitSetDescriptionRequestDto requestDto) {
+        var visit = visitRepository.findById(id)
+                .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
+        visit.setDescription(requestDto.getDescription());
+        var created = visitRepository.save(visit);
+        return mapper.mapToDto(created);
+    }
+
+    public VisitResponseDto changeVisitStatus(int id, VisitSetStatusRequestDto requestDto) {
+        var visit = visitRepository.findById(id)
+                .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
+        var status = mapper.mapStringToStatus(requestDto.getStatus());
+        if ((status != Status.FINISHED) && (status != Status.NOT_APPEARED)) {
+            throw new IllegalStateException("Visit state restricts changing description");
+        }
+        visit.setStatus(status);
+        var created = visitRepository.save(visit);
+        return mapper.mapToDto(created);
     }
 
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {

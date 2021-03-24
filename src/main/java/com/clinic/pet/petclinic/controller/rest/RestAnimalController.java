@@ -35,10 +35,4 @@ public class RestAnimalController {
     AnimalResponseDto createAnimal(@Valid @RequestBody AnimalRequestDto animalRequestDto) {
         return animalService.addAnimal(animalRequestDto);
     }
-
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    void delete(@PathVariable @Min(1) int id) {
-//        animalService.delete(id);
-//    }
 }

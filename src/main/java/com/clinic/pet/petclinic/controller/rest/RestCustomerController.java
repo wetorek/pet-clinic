@@ -35,10 +35,4 @@ public class RestCustomerController {
     CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
         return customerService.addCustomer(customerRequestDto);
     }
-
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    void delete(@PathVariable @Min(1) int id) {
-//        customerService.delete(id);
-//    }
 }
