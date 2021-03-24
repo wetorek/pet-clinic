@@ -36,9 +36,9 @@ public class RestCustomerController {
         return customerService.addCustomer(customerRequestDto);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void delete(@PathVariable @Min(1) int id) {
-        customerService.delete(id);
-    }
+//    @DeleteMapping("/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    void delete(@PathVariable @Min(1) int id) {
+//        customerService.delete(id);
+//    }
 }

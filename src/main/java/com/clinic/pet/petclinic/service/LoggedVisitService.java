@@ -11,7 +11,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +47,11 @@ public class LoggedVisitService implements VisitService {
         if (checkIfVisitOverlaps(requestDto)) {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
+        }
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        if(requestDto.getStartTime().isBefore(nowDateTime) ||
+                requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)))){
+            log.error("Visit cannot be planned on " + requestDto.getStartTime());
         }
         var customer = customerRepository.findById(requestDto.getCustomerID())
                 .orElseThrow(() -> new IllegalArgumentException("Customer does not exist"));
