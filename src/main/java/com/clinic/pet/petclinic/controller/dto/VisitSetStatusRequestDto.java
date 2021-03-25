@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class VisitSetStatusRequestDto {
-    private  String status;
+    private String status;
 }
