@@ -16,7 +16,7 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
     List<Visit> existOverlapping(LocalDateTime timeFrom, LocalDateTime timeTo);
 
     @Modifying
-    @Query("update Visit  v set v.status ='FINISHED_AUTOMATICALLY'  where v.startTime <= :dateTime and v.status = 'PLANNED' ")
+    @Query("update Visit  v set v.status ='FINISHED_AUTOMATICALLY'  where (v.startTime + v.duration) <= :dateTime and v.status = 'PLANNED' ")
     @Transactional
     void automaticEndingVisits(@Param("dateTime") LocalDateTime dateTime);
 }

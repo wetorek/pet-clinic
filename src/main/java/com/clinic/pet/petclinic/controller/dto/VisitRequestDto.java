@@ -21,7 +21,8 @@ public class VisitRequestDto {
     @DurationMin(minutes = 1)
     @DurationMax(hours = 6)
     private final Duration duration;
-    @NotBlank(message = "Animal type is required")
+//    @NotBlank(message = "Animal type is required")
+    @Min(1)
     private final int animalId;
     @NotBlank(message = "Visit status is required")
     private final String status;

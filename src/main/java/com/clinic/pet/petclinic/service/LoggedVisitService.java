@@ -14,7 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -41,16 +43,23 @@ public class LoggedVisitService implements VisitService {
                 .map(mapper::mapToDto);
     }
 
+    private boolean checkDateTime(VisitRequestDto requestDto){
+        Clock clock = Clock.systemUTC();
+        LocalDateTime nowDateTime = LocalDateTime.now(clock);
+
+        return !requestDto.getStartTime().isBefore(nowDateTime) &&
+                !requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)));
+    }
+
     public VisitResponseDto createVisit(VisitRequestDto requestDto) {
         log.info("Creating a Visit");
         if (checkIfVisitOverlaps(requestDto)) {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
         }
-        LocalDateTime nowDateTime = LocalDateTime.now();        //todo spróbuj sobie przetestować coś takiego (wstrzykiwanie clocka)
-        if (requestDto.getStartTime().isBefore(nowDateTime) ||    //TODO nie możemy tego dać do powyższej metody sprawdzającej? a jeżeli nie to do oddzielnej
-                requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)))) { //TODO extract it so separate method and throw exception
+        if (!checkDateTime(requestDto)) {
             log.error("Visit cannot be planned on " + requestDto.getStartTime());
+            throw new IllegalStateException("The visit cannot be scheduled in the past or for less than an hour");
         }
         var customer = customerRepository.findById(requestDto.getCustomerID())
                 .orElseThrow(() -> new IllegalArgumentException("Customer does not exist"));

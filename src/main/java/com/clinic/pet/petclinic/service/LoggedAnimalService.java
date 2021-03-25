@@ -41,7 +41,7 @@ public class LoggedAnimalService implements AnimalService {
         var owner = customerRepository.findById(requestDto.getOwnerID())
                 .orElseThrow(() -> new IllegalArgumentException("Owner does not exist"));
         Animal animal = mapper.mapToEntity(requestDto, owner);
-        log.info("created new animal id: ");
+        log.info("created new animal id: {}", animal.getId());
         var createdAnimal = animalRepository.save(animal);
         return mapper.mapToDto(createdAnimal);
     }

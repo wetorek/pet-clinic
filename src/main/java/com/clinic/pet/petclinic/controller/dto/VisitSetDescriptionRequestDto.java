@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class VisitSetDescriptionRequestDto {
-    private final String description;
+    private  String description;
 }

@@ -37,7 +37,7 @@ public class LoggedCustomerService implements CustomerService {
         log.info("Creating a customer");
         var customer = mapper.mapToEntity(requestDto);
         var createdCustomer = customerRepository.save(customer);
-        log.info("Customer created id: ");
+        log.info("Customer created id: {}", createdCustomer.getId());
         return mapper.mapToDto(createdCustomer);
     }
 
