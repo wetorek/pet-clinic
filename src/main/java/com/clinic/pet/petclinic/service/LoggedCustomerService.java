@@ -41,12 +41,4 @@ public class LoggedCustomerService implements CustomerService {
         return mapper.mapToDto(createdCustomer);
     }
 
-    @Override
-    public void delete(int id) {
-        if (!customerRepository.existsById(id)) {
-            log.error("Customer is not found: {}", id);
-            throw new CustomerNotFoundException("Customer not found: " + id);
-        }
-        customerRepository.deleteById(id);
-    }
 }

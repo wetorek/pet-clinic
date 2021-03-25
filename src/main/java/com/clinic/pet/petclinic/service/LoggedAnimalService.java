@@ -46,12 +46,4 @@ public class LoggedAnimalService implements AnimalService {
         return mapper.mapToDto(createdAnimal);
     }
 
-    @Override
-    public void delete(int id) {
-        if (!animalRepository.existsById(id)) {
-            log.error("Animal is not found: {}", id);
-            throw new AnimalNotFoundException("Animal not found: " + id);
-        }
-        animalRepository.deleteById(id);
-    }
 }

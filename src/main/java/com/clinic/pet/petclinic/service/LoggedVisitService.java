@@ -43,14 +43,6 @@ public class LoggedVisitService implements VisitService {
                 .map(mapper::mapToDto);
     }
 
-    private boolean checkDateTime(VisitRequestDto requestDto){
-        Clock clock = Clock.systemUTC();
-        LocalDateTime nowDateTime = LocalDateTime.now(clock);
-
-        return !requestDto.getStartTime().isBefore(nowDateTime) &&
-                !requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)));
-    }
-
     public VisitResponseDto createVisit(VisitRequestDto requestDto) {
         log.info("Creating a Visit");
         if (checkIfVisitOverlaps(requestDto)) {
@@ -104,5 +96,13 @@ public class LoggedVisitService implements VisitService {
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {
         LocalDateTime endTime = requestDto.getStartTime().plus(requestDto.getDuration());
         return !visitRepository.existOverlapping(requestDto.getStartTime(), endTime).isEmpty();
+    }
+
+    private boolean checkDateTime(VisitRequestDto requestDto) {
+        Clock clock = Clock.systemUTC();
+        LocalDateTime nowDateTime = LocalDateTime.now(clock);
+
+        return !requestDto.getStartTime().isBefore(nowDateTime) &&
+                !requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)));
     }
 }

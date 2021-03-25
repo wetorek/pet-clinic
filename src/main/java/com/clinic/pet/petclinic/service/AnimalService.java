@@ -14,5 +14,4 @@ public interface AnimalService {
 
     AnimalResponseDto addAnimal(AnimalRequestDto requestDto);
 
-    void delete(int id);
 }

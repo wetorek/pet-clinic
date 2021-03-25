@@ -14,5 +14,4 @@ public interface CustomerService {
 
     CustomerResponseDto addCustomer(CustomerRequestDto requestDto);
 
-    void delete(int id);
 }

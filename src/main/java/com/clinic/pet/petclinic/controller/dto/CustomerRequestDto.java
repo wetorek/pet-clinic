@@ -3,10 +3,12 @@ package com.clinic.pet.petclinic.controller.dto;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 public class CustomerRequestDto {
-    @NotNull
-    private final String name;
-    @NotNull
-    private final String surname;
+    @NotBlank
+    private String name;
+    @NotBlank
+    private String surname;
 }
