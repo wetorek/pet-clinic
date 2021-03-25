@@ -8,5 +8,8 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 class PetClinicApplicationTests {
 
+    @Test
+    void contextLoads() {
+    }
 
 }

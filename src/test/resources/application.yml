@@ -1,0 +1,18 @@
+#spring:
+#  h2:
+#    console:
+#      enabled: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#  datasource:
+#    url: jdbc:h2:file:./src/main/resources/db/db;AUTO_SERVER=true
+#    username: sa
+#    password: sa
+spring:
+  datasource:
+    url: jdbc:postgresql://ec2-54-247-158-179.eu-west-1.compute.amazonaws.com:5432/dd6052ra9fn5i5
+    username: yentaqbdjqzspj
+    password: 814cf7954133e0bb6349c7844a18ea57e04a44d4bdc61f7d58bc5a2a49470714
+  flyway:
+    baseline-on-migrate: true
