@@ -1,8 +1,8 @@
--- DROP TABLE customers IF EXISTS cascade;
--- DROP TABLE animals IF EXISTS cascade;
--- DROP TABLE vets IF EXISTS cascade;
--- DROP TABLE visits IF EXISTS cascade;
--- DROP TABLE flyway_schema_history IF EXISTS cascade;
+-- DROP TABLE customers cascade;
+-- DROP TABLE animals cascade;
+-- DROP TABLE vets cascade;
+-- DROP TABLE visits cascade;
+-- DROP TABLE flyway_schema_history cascade;
 
 CREATE TABLE IF NOT EXISTS customers
 (

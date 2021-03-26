@@ -3,7 +3,6 @@ package com.clinic.pet.petclinic.service;
 import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.entity.Animal;
-import com.clinic.pet.petclinic.exceptions.AnimalNotFoundException;
 import com.clinic.pet.petclinic.repository.AnimalRepository;
 import com.clinic.pet.petclinic.repository.CustomerRepository;
 import lombok.AllArgsConstructor;

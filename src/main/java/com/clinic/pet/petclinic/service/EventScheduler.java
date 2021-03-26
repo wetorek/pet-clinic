@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -13,11 +14,12 @@ import java.time.LocalDateTime;
 @Profile("prod")
 public class EventScheduler {
     private final VisitRepository visitRepository;
+    private final Clock clock;
 
     @Scheduled(fixedRate = 3_600_000)
-    public void endingVisits(){
+    public void endingVisits() {
         log.info("ending visits");
-        var localDateTime = LocalDateTime.now();
+        var localDateTime = LocalDateTime.now(clock);
         visitRepository.automaticEndingVisits(localDateTime);
     }
 }

@@ -13,5 +13,4 @@ public interface AnimalService {
     Optional<AnimalResponseDto> getAnimalById(int id);
 
     AnimalResponseDto addAnimal(AnimalRequestDto requestDto);
-
 }
