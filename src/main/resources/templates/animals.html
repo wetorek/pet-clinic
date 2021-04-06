@@ -33,5 +33,63 @@
         </table>
     </div>
 </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <button  id="btn-add"> ADD ANIMAL</button>
+    </div>
+
+    <form style="display: none;">
+        <label>NAME
+            <input type="text" name="name">
+        </label>
+        <label>DATE OF BIRTH
+            <input type="date" name="dateOfBirth">
+        </label>
+        <label>SPECIES
+            <select name="species">
+                <option>DOG</option>
+                <option>CAT</option>
+                <option>HAMSTER</option>
+                <option>RAT</option>
+                <option>GUINEA_PIG</option>
+                <option>OTHER</option>
+            </select>
+        </label>
+        <label>OWNER ID
+            <input type="number" name="ownerID">
+        </label>
+        <button type="submit" id="send-button" style="display: none;">SEND FORM!</button>
+    </form>
+
+    <script>
+        document.getElementById("btn-add").addEventListener("click", function (){
+            document.querySelector('form').style.display = 'block';
+            document.getElementById("send-button").style.display = 'block';
+        }, false);
+
+
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const resp = await fetch('/api/animals', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: form.elements.name.value,
+                    dateOfBirth: form.elements.dateOfBirth.value,
+                    species: form.elements.species.value.toString(),
+                    ownerID: form.elements.ownerID.value
+                })
+            });
+            if (resp.ok) {
+                form.reset();
+                window.location.reload(true);
+            }
+        });
+    </script>
 </body>
 </html>

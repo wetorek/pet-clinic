@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/ui/customers")
 @AllArgsConstructor
 public class ThymeCustomerController {
-
     private final CustomerService customerService;
 
     @GetMapping
