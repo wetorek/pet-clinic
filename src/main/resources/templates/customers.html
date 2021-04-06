@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+    <title>Customers</title>
+</head>
+<body>
+<div th:switch="${customers}">
+    <div style="text-align: center" th:case="*">
+        <h2>Customers <span th:text="${#lists.size(customers)}"></span></h2>
+        <table th:class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Surname</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.name}"></td>
+                <td th:text="${customer.surname}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
