@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+    <title>Animals</title>
+</head>
+<body>
+<div th:switch="${animals}">
+    <div style="text-align: center" th:case="*">
+        <h2>Animals<span th:text="${#lists.size(animals)}"></span></h2>
+        <table th:class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Species</th>
+                <th>Date of birth</th>
+                <th>Owner ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="animal : ${animals}">
+                <td th:text="${animal.id}"></td>
+                <td th:text="${animal.name}"></td>
+                <td th:text="${animal.species}"></td>
+                <td th:text="${animal.dateOfBirth}"></td>
+                <td th:text="${animal.ownerId}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
