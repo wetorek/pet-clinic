@@ -13,5 +13,4 @@ public interface CustomerService {
     Optional<CustomerResponseDto> getCustomerById(int id);
 
     CustomerResponseDto addCustomer(CustomerRequestDto requestDto);
-
 }

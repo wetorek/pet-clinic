@@ -2,7 +2,6 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
-import com.clinic.pet.petclinic.exceptions.CustomerNotFoundException;
 import com.clinic.pet.petclinic.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

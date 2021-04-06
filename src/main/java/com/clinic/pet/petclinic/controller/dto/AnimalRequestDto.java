@@ -1,6 +1,5 @@
 package com.clinic.pet.petclinic.controller.dto;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
@@ -9,13 +8,12 @@ import java.time.LocalDate;
 
 @Data
 public class AnimalRequestDto {
-    @NotNull
-    private  String name;
-    private  LocalDate dateOfBirth;
-    @NotBlank
-    private  String species;
-    @NotNull
+    @NotBlank(message = "Name is required")
+    private String name;
+    private LocalDate dateOfBirth;
+    @NotBlank(message = "Species is required")
+    private String species;
     @Min(value = 1)
-    private  int ownerID;
+    private int ownerID;
 
 }

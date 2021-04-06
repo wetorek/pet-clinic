@@ -1,14 +1,13 @@
 package com.clinic.pet.petclinic.controller.dto;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
 public class CustomerRequestDto {
-    @NotBlank
+    @NotBlank(message = "Name is required")
     private String name;
-    @NotBlank
+    @NotBlank(message = "Surname is required")
     private String surname;
 }

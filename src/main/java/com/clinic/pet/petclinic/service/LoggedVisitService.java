@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +29,7 @@ public class LoggedVisitService implements VisitService {
     private final CustomerRepository customerRepository;
     private final VetRepository vetRepository;
     private final VisitMapper mapper;
+    private final Clock clock;
 
     public List<VisitResponseDto> getAllVisits() {
         log.info("Getting all Visits");
@@ -49,7 +49,7 @@ public class LoggedVisitService implements VisitService {
             log.error("Visit is overlapping");
             throw new IllegalStateException("This visit is overlapping");
         }
-        if (!checkDateTime(requestDto)) {
+        if (!checkIfStartTimeIsValid(requestDto.getStartTime())) {
             log.error("Visit cannot be planned on " + requestDto.getStartTime());
             throw new IllegalStateException("The visit cannot be scheduled in the past or for less than an hour");
         }
@@ -76,6 +76,9 @@ public class LoggedVisitService implements VisitService {
     public VisitResponseDto changeDescription(int id, VisitSetDescriptionRequestDto requestDto) {
         var visit = visitRepository.findById(id)
                 .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
+        if ((visit.getStatus() != Status.FINISHED) && (visit.getStatus() != Status.NOT_APPEARED)) {
+            throw new IllegalStateException("Visit state restricts changing description");
+        }
         visit.setDescription(requestDto.getDescription());
         var created = visitRepository.save(visit);
         return mapper.mapToDto(created);
@@ -86,7 +89,7 @@ public class LoggedVisitService implements VisitService {
                 .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
         var status = mapper.mapStringToStatus(requestDto.getStatus());
         if ((status != Status.FINISHED) && (status != Status.NOT_APPEARED)) {
-            throw new IllegalStateException("Visit state restricts changing description");
+            throw new IllegalStateException("Visit state restricts changing status");
         }
         visit.setStatus(status);
         var created = visitRepository.save(visit);
@@ -98,11 +101,9 @@ public class LoggedVisitService implements VisitService {
         return !visitRepository.existOverlapping(requestDto.getStartTime(), endTime).isEmpty();
     }
 
-    private boolean checkDateTime(VisitRequestDto requestDto) {
-        Clock clock = Clock.systemUTC();
-        LocalDateTime nowDateTime = LocalDateTime.now(clock);
-
-        return !requestDto.getStartTime().isBefore(nowDateTime) &&
-                !requestDto.getStartTime().isBefore(nowDateTime.plus(Duration.ofHours(1)));
+    private boolean checkIfStartTimeIsValid(LocalDateTime visitStartTime) {
+        LocalDateTime currentDateTime = LocalDateTime.now(clock);
+        return !visitStartTime.isBefore(currentDateTime) &&
+                !visitStartTime.isBefore(currentDateTime.plus(Duration.ofHours(1)));
     }
 }
