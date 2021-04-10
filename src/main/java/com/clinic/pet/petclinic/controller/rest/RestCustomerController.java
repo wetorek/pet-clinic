@@ -13,7 +13,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/v1/customers")
 @AllArgsConstructor
 public class RestCustomerController {
     private final CustomerService customerService;

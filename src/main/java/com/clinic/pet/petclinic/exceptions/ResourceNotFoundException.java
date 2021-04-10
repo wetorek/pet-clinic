@@ -1,6 +1,6 @@
 package com.clinic.pet.petclinic.exceptions;
 
-public class ResourceNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends ApplicationException {
     public ResourceNotFoundException() {
     }
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/ui/visits")
+@RequestMapping("/ui/v1/visits")
 @AllArgsConstructor
 public class ThymeVisitController {
     private final VisitService visitService;

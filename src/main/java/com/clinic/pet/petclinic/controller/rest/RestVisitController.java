@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/visits")
+@RequestMapping("/api/v1/visits")
 @AllArgsConstructor
 class RestVisitController {
     private final VisitService visitService;

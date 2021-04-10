@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/ui/customers")
+@RequestMapping("/ui/v1/customers")
 @AllArgsConstructor
 public class ThymeCustomerController {
     private final CustomerService customerService;

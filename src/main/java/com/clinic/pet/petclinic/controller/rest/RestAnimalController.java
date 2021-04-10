@@ -13,7 +13,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/animals")
+@RequestMapping("/api/v1/animals")
 @AllArgsConstructor
 public class RestAnimalController {
     private final AnimalService animalService;

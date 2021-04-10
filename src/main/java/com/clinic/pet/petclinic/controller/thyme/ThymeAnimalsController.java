@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/ui/animals")
+@RequestMapping("/ui/v1/animals")
 @AllArgsConstructor
 public class ThymeAnimalsController {
     private final AnimalService animalService;

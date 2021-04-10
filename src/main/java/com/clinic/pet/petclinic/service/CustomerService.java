@@ -2,15 +2,39 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
+import com.clinic.pet.petclinic.repository.CustomerRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CustomerService {
+@AllArgsConstructor
+@Service
+@Slf4j
+public class CustomerService {
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper mapper;
 
-    List<CustomerResponseDto> getAllCustomers();
+    public List<CustomerResponseDto> getAllCustomers() {
+        log.info("Getting all customers");
+        var customers = customerRepository.findAll();
+        return mapper.mapListToDto(customers);
+    }
 
-    Optional<CustomerResponseDto> getCustomerById(int id);
+    public Optional<CustomerResponseDto> getCustomerById(int id) {
+        log.info("Getting customer by id: {}", id);
+        return customerRepository.findById(id)
+                .map(mapper::mapToDto);
+    }
 
-    CustomerResponseDto addCustomer(CustomerRequestDto requestDto);
+    public CustomerResponseDto addCustomer(CustomerRequestDto requestDto) {
+        log.info("Creating a customer");
+        var customer = mapper.mapToEntity(requestDto);
+        var createdCustomer = customerRepository.save(customer);
+        log.info("Customer created id: {}", createdCustomer.getId());
+        return mapper.mapToDto(createdCustomer);
+    }
+
 }

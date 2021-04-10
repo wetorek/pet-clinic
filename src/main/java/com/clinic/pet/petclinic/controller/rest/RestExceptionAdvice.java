@@ -1,26 +1,40 @@
 package com.clinic.pet.petclinic.controller.rest;
 
+import com.clinic.pet.petclinic.exceptions.ApplicationIllegalArgumentEx;
 import com.clinic.pet.petclinic.exceptions.ErrorResponse;
+import com.clinic.pet.petclinic.exceptions.IllegalVisitStateException;
 import com.clinic.pet.petclinic.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice
+@RestControllerAdvice(annotations = RestController.class)
 public class RestExceptionAdvice {
     @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(IllegalStateException.class)
-    ErrorResponse handleConflict(IllegalStateException ex) {
+    @ExceptionHandler(IllegalVisitStateException.class)
+    ErrorResponse handleConflict(IllegalVisitStateException ex) {
         return ErrorResponse.builder()
                 .errorCode("Illegal operation performed")
                 .status(HttpStatus.CONFLICT.value())
+                .timestamp(LocalDateTime.now())
+                .errorMessage(ex.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ApplicationIllegalArgumentEx.class)
+    ErrorResponse handleConflict(ApplicationIllegalArgumentEx ex) {
+        return ErrorResponse.builder()
+                .errorCode("Illegal argument given")
+                .status(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
                 .errorMessage(ex.getMessage())
                 .build();
