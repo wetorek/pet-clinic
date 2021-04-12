@@ -28,6 +28,11 @@ CREATE TABLE IF NOT EXISTS vets
     name         varchar(255)       not null,
     surname      varchar(255)       not null
 );
+CREATE TABLE IF NOT EXISTS surgeries
+(
+    id          serial primary key not null,
+    name        varchar(255)       not null
+);
 CREATE TABLE IF NOT EXISTS visits
 (
     id          serial primary key not null,
@@ -38,6 +43,8 @@ CREATE TABLE IF NOT EXISTS visits
     animal_id   integer            not null,
     customer_id integer            not null,
     vet_id      integer            not null,
+    surgery_id  integer            not null,
+    FOREIGN KEY (surgery_id) REFERENCES surgeries (id),
     FOREIGN KEY (customer_id) REFERENCES customers (id),
     FOREIGN KEY (animal_id) REFERENCES animals (id),
     FOREIGN KEY (vet_id) REFERENCES vets (id)

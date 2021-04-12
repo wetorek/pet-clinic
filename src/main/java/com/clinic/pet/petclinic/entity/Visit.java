@@ -45,6 +45,10 @@ public class Visit {
     @JoinColumn(name = "vet_id", nullable = false)
     private Vet vet;
 
+    @ManyToOne
+    @JoinColumn(name = "surgery_id", nullable = false)
+    private Surgery surgery;
+
     @PersistenceConstructor
     protected Visit() {
     }
