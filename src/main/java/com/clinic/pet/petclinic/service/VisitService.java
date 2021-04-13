@@ -110,13 +110,13 @@ public class VisitService {
 
     public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
         List<Vet> vets = vetRepository.findAll();
-        LocalDateTime slotTime = start;
         List<FreeSlotVisitResponseDto> result = new ArrayList<>();
 
         for (Vet vet : vets){
+            LocalDateTime slotTime = start;
             while (slotTime.isBefore(end)){
                 if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty()){
-                    result.add(new FreeSlotVisitResponseDto(slotTime, vet));
+                    result.add(new FreeSlotVisitResponseDto(slotTime, vet.getName(), vet.getSurname()));
                 }
                 slotTime = slotTime.plusMinutes(15);
             }
