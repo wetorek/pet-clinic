@@ -1,24 +1,22 @@
 package com.clinic.pet.petclinic.service;
 
-import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
-import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
-import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
-import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
+import com.clinic.pet.petclinic.controller.dto.*;
 import com.clinic.pet.petclinic.entity.Status;
+import com.clinic.pet.petclinic.entity.Vet;
 import com.clinic.pet.petclinic.exceptions.ApplicationIllegalArgumentEx;
 import com.clinic.pet.petclinic.exceptions.IllegalVisitStateException;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
-import com.clinic.pet.petclinic.repository.AnimalRepository;
-import com.clinic.pet.petclinic.repository.CustomerRepository;
-import com.clinic.pet.petclinic.repository.VetRepository;
-import com.clinic.pet.petclinic.repository.VisitRepository;
+import com.clinic.pet.petclinic.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +27,7 @@ public class VisitService {
     private final VisitRepository visitRepository;
     private final AnimalRepository animalRepository;
     private final CustomerRepository customerRepository;
+    private final SurgeryRepository surgeryRepository;
     private final VetRepository vetRepository;
     private final VisitMapper mapper;
     private final Clock clock;
@@ -107,5 +106,21 @@ public class VisitService {
         LocalDateTime currentDateTime = LocalDateTime.now(clock);
         return !visitStartTime.isBefore(currentDateTime) &&
                 !visitStartTime.isBefore(currentDateTime.plus(Duration.ofHours(1)));
+    }
+
+    public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
+        List<Vet> vets = vetRepository.findAll();
+        LocalDateTime slotTime = start;
+        List<FreeSlotVisitResponseDto> result = new ArrayList<>();
+
+        for (Vet vet : vets){
+            while (slotTime.isBefore(end)){
+                if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty()){
+                    result.add(new FreeSlotVisitResponseDto(slotTime, vet));
+                }
+                slotTime = slotTime.plusMinutes(15);
+            }
+        }
+        return result;
     }
 }

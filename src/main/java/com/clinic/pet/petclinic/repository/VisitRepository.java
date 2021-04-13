@@ -19,4 +19,7 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
     @Query("update Visit  v set v.status ='FINISHED_AUTOMATICALLY'  where (v.startTime + v.duration) <= :dateTime and v.status = 'PLANNED' ")
     @Transactional
     void automaticEndingVisits(@Param("dateTime") LocalDateTime dateTime);
+
+    @Query("select v from Visit v where(v.vet.id = :id and ( (v.startTime >= :startTime and v.startTime <= :endTime) or ( (v.startTime + v.duration) >= :startTime and (v.startTime + v.duration) <= :endTime  ) ) )")
+    List<Visit> existVisitBetweenTime(@Param("id") Integer id, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 }
