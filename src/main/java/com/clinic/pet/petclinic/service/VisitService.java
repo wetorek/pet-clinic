@@ -2,6 +2,7 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.*;
 import com.clinic.pet.petclinic.entity.Status;
+import com.clinic.pet.petclinic.entity.Surgery;
 import com.clinic.pet.petclinic.entity.Vet;
 import com.clinic.pet.petclinic.exceptions.ApplicationIllegalArgumentEx;
 import com.clinic.pet.petclinic.exceptions.IllegalVisitStateException;
@@ -19,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -54,14 +56,17 @@ public class VisitService {
             log.error("Visit cannot be planned on " + requestDto.getStartTime());
             throw new IllegalVisitStateException("The visit cannot be scheduled in the past or for less than an hour");
         }
+        if (!checkIfVisitIsInAvailableTime(requestDto)) {
+            log.error("Vet is not available in this time");
+            throw new IllegalVisitStateException("The visit should be planned in Vet available time");
+        }
         var customer = customerRepository.findById(requestDto.getCustomerID())
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Customer does not exist"));
         var animal = animalRepository.findById(requestDto.getAnimalId())
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Animal does not exist"));
-        var vet = vetRepository.findById(1)
+        var vet = vetRepository.findById(requestDto.getVetId())
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Vet does not exist"));
-        var surgery = surgeryRepository.findById(1)
-                .orElseThrow(() -> new ApplicationIllegalArgumentEx("Surgery does not exist"));
+        var surgery = chooseSurgery(requestDto);
         var visit = mapper.mapToEntity(requestDto, animal, vet, customer, surgery);
         var createdVisit = visitRepository.save(visit);
         log.info("Visit created id: {}", createdVisit.getId());
@@ -99,6 +104,22 @@ public class VisitService {
         return mapper.mapToDto(created);
     }
 
+    public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
+        List<Vet> vets = vetRepository.findAll();
+        List<FreeSlotVisitResponseDto> result = new ArrayList<>();
+
+        for (Vet vet : vets) {
+            LocalDateTime slotTime = start;
+            while (slotTime.isBefore(end)) {
+                if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty()) {
+                    result.add(new FreeSlotVisitResponseDto(slotTime, vet.getName(), vet.getSurname()));
+                }
+                slotTime = slotTime.plusMinutes(15);
+            }
+        }
+        return result;
+    }
+
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {
         LocalDateTime endTime = requestDto.getStartTime().plus(requestDto.getDuration());
         return !visitRepository.existOverlapping(requestDto.getStartTime(), endTime).isEmpty();
@@ -110,19 +131,29 @@ public class VisitService {
                 !visitStartTime.isBefore(currentDateTime.plus(Duration.ofHours(1)));
     }
 
-    public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
-        List<Vet> vets = vetRepository.findAll();
-        List<FreeSlotVisitResponseDto> result = new ArrayList<>();
+    private boolean checkIfVisitIsInAvailableTime(VisitRequestDto requestDto) {
+        var vet = vetRepository.findById(requestDto.getVetId())
+                .orElseThrow(() -> new ApplicationIllegalArgumentEx("Vet does not exist"));
+        var visitStartTime = requestDto.getStartTime().toLocalTime();
+        var visitEndTime = requestDto.getStartTime().plus(requestDto.getDuration()).toLocalTime();
+        return vet.getAvailabilityFrom().isBefore(visitStartTime) && vet.getAvailabilityTo().isAfter(visitEndTime);
+    }
 
-        for (Vet vet : vets){
-            LocalDateTime slotTime = start;
-            while (slotTime.isBefore(end)){
-                if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty()){
-                    result.add(new FreeSlotVisitResponseDto(slotTime, vet.getName(), vet.getSurname()));
-                }
-                slotTime = slotTime.plusMinutes(15);
-            }
+    private Surgery chooseSurgery(VisitRequestDto requestDto) {
+        var visits = visitRepository.existVisitBetweenTime(requestDto.getVetId(), requestDto.getStartTime(),
+                requestDto.getStartTime().plus(requestDto.getDuration()));
+        if (visits.isEmpty()) {
+            return surgeryRepository.findAll().get(0);
+        } else {
+            var notAvailableSurgeriesIdList = visits
+                    .stream()
+                    .map(visit -> visit.getSurgery().getId())
+                    .collect(Collectors.toList());
+            var surgeries = surgeryRepository.findAll();
+            return surgeries.stream()
+                    .filter(surgery -> !notAvailableSurgeriesIdList.contains(surgery.getId()))
+                    .collect(Collectors.toList())
+                    .get(0);
         }
-        return result;
     }
 }

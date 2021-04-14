@@ -29,4 +29,6 @@ public class VisitRequestDto {
     @Min(value = 1)
     private int customerID;
     private String description;
+    @NotNull
+    private int vetId;
 }

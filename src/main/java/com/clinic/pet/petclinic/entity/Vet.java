@@ -7,6 +7,8 @@ import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Table(name = "vets")
@@ -22,7 +24,9 @@ public class Vet {
     @NotNull
     private String surname;
     @NotNull
-    private String availability;
+    private LocalTime availabilityFrom;
+    @NotNull
+    private LocalTime availabilityTo;
     @Lob
     private Byte[] image;
 
