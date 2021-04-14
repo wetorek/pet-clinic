@@ -60,7 +60,9 @@ public class VisitService {
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Animal does not exist"));
         var vet = vetRepository.findById(1)
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Vet does not exist"));
-        var visit = mapper.mapToEntity(requestDto, animal, vet, customer);
+        var surgery = surgeryRepository.findById(1)
+                .orElseThrow(() -> new ApplicationIllegalArgumentEx("Surgery does not exist"));
+        var visit = mapper.mapToEntity(requestDto, animal, vet, customer, surgery);
         var createdVisit = visitRepository.save(visit);
         log.info("Visit created id: {}", createdVisit.getId());
         return mapper.mapToDto(createdVisit);

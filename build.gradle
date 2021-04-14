@@ -28,6 +28,7 @@ dependencies {
     implementation 'com.vladmihalcea:hibernate-types-52:2.10.2'
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     implementation 'org.flywaydb:flyway-core'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"

@@ -24,9 +24,10 @@ public interface VisitMapper {
             @Mapping(source = "animal", target = "animal"),
             @Mapping(source = "vet", target = "vet"),
             @Mapping(source = "customer", target = "customer"),
+            @Mapping(source = "surgery", target = "surgery"),
             @Mapping(target = "id", ignore = true)
     })
-    Visit mapToEntity(VisitRequestDto requestDto, Animal animal, Vet vet, Customer customer);
+    Visit mapToEntity(VisitRequestDto requestDto, Animal animal, Vet vet, Customer customer, Surgery surgery);
 
     default Status mapStringToStatus(String status) {
         return Status.valueOf(status);

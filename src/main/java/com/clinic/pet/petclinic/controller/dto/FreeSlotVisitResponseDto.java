@@ -4,13 +4,16 @@ import com.clinic.pet.petclinic.entity.Surgery;
 import com.clinic.pet.petclinic.entity.Vet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Data
 @AllArgsConstructor
-public class FreeSlotVisitResponseDto {
+@NoArgsConstructor
+public class FreeSlotVisitResponseDto extends RepresentationModel<FreeSlotVisitResponseDto> {
     private LocalDateTime start;
     private String vetName;
     private String vetSurname;
