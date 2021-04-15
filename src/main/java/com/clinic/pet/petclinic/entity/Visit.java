@@ -52,18 +52,4 @@ public class Visit {
     @PersistenceConstructor
     protected Visit() {
     }
-
-//    public static Visit from(LocalDateTime startTime, Duration duration, String animal, String status, BigDecimal price, int customerID) {
-//        var animalEnum = AnimalSpecies.valueOf(animal);
-//        var statusEnum = Status.valueOf(status);
-//        return Visit.builder()
-//                .startTime(startTime)
-//                .duration(duration)
-//                .animal(animalEnum)
-//                .status(statusEnum)
-//                .price(price)
-//                .description("")
-//                .customerID(customerID)
-//                .build();
-//    }
 }

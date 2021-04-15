@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,31 +27,27 @@ class RestVisitController {
     @GetMapping(produces = "application/hal+json")
     public List<VisitResponseDto> getAllVisits() {
         var visits = visitService.getAllVisits();
-        return visits
-                .stream()
+        return visits.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{id}", produces = "application/hal+json")
     public ResponseEntity<VisitResponseDto> getVisit(@PathVariable @Min(1) int id) {
-        var visit = visitService.getVisitById(id);
-        var result = visit.map(this::represent).orElse(null);
-        if (result != null) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return visitService.getVisitById(id)
+                .map(this::represent)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(path = "/find", produces = "application/hal+json")
+    //todo move it to separate controller @GET api/v1/timeslots i w requestparam start i end
     public List<FreeSlotVisitResponseDto> findSlotForVisit(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
-            ){
+    ) {
         var freeSlots = visitService.findFreeSlots(start, end);
-        return freeSlots
-                .stream()
+        return freeSlots.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
     }
@@ -60,8 +55,8 @@ class RestVisitController {
     @PostMapping(produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     VisitResponseDto createVisit(@Valid @RequestBody VisitRequestDto visitRequestDto) {
-         var visit = visitService.createVisit(visitRequestDto);
-         return represent(visit);
+        var visit = visitService.createVisit(visitRequestDto);
+        return represent(visit);
     }
 
     @PatchMapping(path = "/{id}/status", produces = "application/hal+json")

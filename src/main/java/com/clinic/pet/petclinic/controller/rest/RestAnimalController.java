@@ -26,18 +26,17 @@ public class RestAnimalController {
     @GetMapping(produces = "application/hal+json")
     public List<AnimalResponseDto> getAllAnimals() {
         var animals = animalService.getAllAnimals();
-        return animals.stream().map(this::represent).collect(Collectors.toList());
+        return animals.stream()
+                .map(this::represent)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{id}", produces = "application/hal+json")
     public ResponseEntity<AnimalResponseDto> getAnimal(@PathVariable @Min(1) int id) {
-        var animal = animalService.getAnimalById(id);
-        var result = animal.map(this::represent).orElse(null);
-        if (result != null) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return animalService.getAnimalById(id)
+                .map(this::represent)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping(produces = "application/hal+json")

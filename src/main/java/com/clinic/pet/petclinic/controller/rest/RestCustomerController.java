@@ -1,6 +1,5 @@
 package com.clinic.pet.petclinic.controller.rest;
 
-import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
 import com.clinic.pet.petclinic.service.CustomerService;
@@ -27,21 +26,17 @@ public class RestCustomerController {
     @GetMapping(produces = "application/hal+json")
     public List<CustomerResponseDto> getAllCustomers() {
         var customers = customerService.getAllCustomers();
-        return customers
-                .stream()
+        return customers.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{id}", produces = "application/hal+json")
     public ResponseEntity<CustomerResponseDto> getCustomer(@PathVariable @Min(1) int id) {
-        var customer = customerService.getCustomerById(id);
-        var result = customer.map(this::represent).orElse(null);
-        if (result != null) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return customerService.getCustomerById(id)
+                .map(this::represent)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping(produces = "application/hal+json")

@@ -10,15 +10,12 @@ import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
 import com.clinic.pet.petclinic.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -106,7 +103,7 @@ public class VisitService {
         return visitMapper.mapToDto(created);
     }
 
-    public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
+    public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) { //todo move it to separate service
         return vetRepository.findAll().stream()
                 .map(vet -> findFreeSlotsForVet(vet, start, end))
                 .flatMap(List::stream)
@@ -118,7 +115,7 @@ public class VisitService {
         LocalDateTime slotTime = start;
         while (slotTime.isBefore(end)) {
             if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty() &&
-                    vetIsAvailable(vet, slotTime, slotTime.plusMinutes(15))) {
+                    checkIfVetIsAvailable(vet, slotTime, slotTime.plusMinutes(15))) {
                 result.add(new FreeSlotVisitResponseDto(slotTime, vetMapper.mapToDto(vet)));
             }
             slotTime = slotTime.plusMinutes(15);
@@ -126,7 +123,7 @@ public class VisitService {
         return result;
     }
 
-    private boolean vetIsAvailable(Vet vet, LocalDateTime start, LocalDateTime end) {
+    private boolean checkIfVetIsAvailable(Vet vet, LocalDateTime start, LocalDateTime end) {
         return vet.getAvailabilityFrom().isBefore(start.toLocalTime()) && vet.getAvailabilityTo().isAfter(end.toLocalTime());
     }
 
@@ -152,12 +149,10 @@ public class VisitService {
     private Surgery chooseSurgery(VisitRequestDto requestDto) {
         var visits = visitRepository.existVisitBetweenTime(requestDto.getVetId(), requestDto.getStartTime(),
                 requestDto.getStartTime().plus(requestDto.getDuration()));
-        var notAvailableSurgeriesIdList = visits
-                .stream()
+        var notAvailableSurgeriesIdList = visits.stream()
                 .map(visit -> visit.getSurgery().getId())
-                .collect(Collectors.toList());
-        var surgeries = surgeryRepository.findAll();
-        return surgeries.stream()
+                .collect(Collectors.toSet());
+        return surgeryRepository.findAll().stream()
                 .filter(surgery -> !notAvailableSurgeriesIdList.contains(surgery.getId()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalVisitStateException("No surgery available"));

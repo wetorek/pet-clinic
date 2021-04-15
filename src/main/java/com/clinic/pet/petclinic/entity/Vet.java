@@ -6,8 +6,6 @@ import lombok.Data;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
