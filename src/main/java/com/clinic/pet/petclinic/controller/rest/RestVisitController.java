@@ -93,8 +93,7 @@ class RestVisitController {
 
     private FreeSlotVisitResponseDto represent(FreeSlotVisitResponseDto freeSlot) {
         Link allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withSelfRel();
-        var representation = new FreeSlotVisitResponseDto(freeSlot.getStart(), freeSlot.getVetName(), freeSlot.getVetSurname());
-        representation.add(allVisits);
-        return representation;
+        freeSlot.add(allVisits);
+        return freeSlot;
     }
 }

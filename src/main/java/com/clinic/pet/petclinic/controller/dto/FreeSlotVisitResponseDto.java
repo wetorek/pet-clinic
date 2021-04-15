@@ -15,7 +15,5 @@ import java.util.Optional;
 @NoArgsConstructor
 public class FreeSlotVisitResponseDto extends RepresentationModel<FreeSlotVisitResponseDto> {
     private LocalDateTime start;
-    private String vetName;
-    private String vetSurname;
-
+    private VetResponseDto vet;
 }

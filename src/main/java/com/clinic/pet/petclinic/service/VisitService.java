@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,19 +32,20 @@ public class VisitService {
     private final CustomerRepository customerRepository;
     private final SurgeryRepository surgeryRepository;
     private final VetRepository vetRepository;
-    private final VisitMapper mapper;
+    private final VisitMapper visitMapper;
+    private final VetMapper vetMapper;
     private final Clock clock;
 
     public List<VisitResponseDto> getAllVisits() {
         log.info("Getting all Visits");
         var visits = visitRepository.findAll();
-        return mapper.mapListToDto(visits);
+        return visitMapper.mapListToDto(visits);
     }
 
     public Optional<VisitResponseDto> getVisitById(int id) {
         log.info("Getting Visit by id: {}", id);
         return visitRepository.findById(id)
-                .map(mapper::mapToDto);
+                .map(visitMapper::mapToDto);
     }
 
     public VisitResponseDto createVisit(VisitRequestDto requestDto) {
@@ -67,10 +69,10 @@ public class VisitService {
         var vet = vetRepository.findById(requestDto.getVetId())
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Vet does not exist"));
         var surgery = chooseSurgery(requestDto);
-        var visit = mapper.mapToEntity(requestDto, animal, vet, customer, surgery);
+        var visit = visitMapper.mapToEntity(requestDto, animal, vet, customer, surgery);
         var createdVisit = visitRepository.save(visit);
         log.info("Visit created id: {}", createdVisit.getId());
-        return mapper.mapToDto(createdVisit);
+        return visitMapper.mapToDto(createdVisit);
     }
 
     public void delete(int id) {
@@ -89,35 +91,43 @@ public class VisitService {
         }
         visit.setDescription(requestDto.getDescription());
         var created = visitRepository.save(visit);
-        return mapper.mapToDto(created);
+        return visitMapper.mapToDto(created);
     }
 
     public VisitResponseDto changeVisitStatus(int id, VisitSetStatusRequestDto requestDto) {
         var visit = visitRepository.findById(id)
                 .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
-        var status = mapper.mapStringToStatus(requestDto.getStatus());
+        var status = visitMapper.mapStringToStatus(requestDto.getStatus());
         if ((status != Status.FINISHED) && (status != Status.NOT_APPEARED)) {
             throw new IllegalVisitStateException("Visit state restricts changing status");
         }
         visit.setStatus(status);
         var created = visitRepository.save(visit);
-        return mapper.mapToDto(created);
+        return visitMapper.mapToDto(created);
     }
 
     public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
-        List<Vet> vets = vetRepository.findAll();
-        List<FreeSlotVisitResponseDto> result = new ArrayList<>();
+        return vetRepository.findAll().stream()
+                .map(vet -> findFreeSlotsForVet(vet, start, end))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
 
-        for (Vet vet : vets) {
-            LocalDateTime slotTime = start;
-            while (slotTime.isBefore(end)) {
-                if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty()) {
-                    result.add(new FreeSlotVisitResponseDto(slotTime, vet.getName(), vet.getSurname()));
-                }
-                slotTime = slotTime.plusMinutes(15);
+    private List<FreeSlotVisitResponseDto> findFreeSlotsForVet(Vet vet, LocalDateTime start, LocalDateTime end) {
+        List<FreeSlotVisitResponseDto> result = new ArrayList<>();
+        LocalDateTime slotTime = start;
+        while (slotTime.isBefore(end)) {
+            if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty() &&
+                    vetIsAvailable(vet, slotTime, slotTime.plusMinutes(15))) {
+                result.add(new FreeSlotVisitResponseDto(slotTime, vetMapper.mapToDto(vet)));
             }
+            slotTime = slotTime.plusMinutes(15);
         }
         return result;
+    }
+
+    private boolean vetIsAvailable(Vet vet, LocalDateTime start, LocalDateTime end) {
+        return vet.getAvailabilityFrom().isBefore(start.toLocalTime()) && vet.getAvailabilityTo().isAfter(end.toLocalTime());
     }
 
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {
@@ -142,18 +152,14 @@ public class VisitService {
     private Surgery chooseSurgery(VisitRequestDto requestDto) {
         var visits = visitRepository.existVisitBetweenTime(requestDto.getVetId(), requestDto.getStartTime(),
                 requestDto.getStartTime().plus(requestDto.getDuration()));
-        if (visits.isEmpty()) {
-            return surgeryRepository.findAll().get(0);
-        } else {
-            var notAvailableSurgeriesIdList = visits
-                    .stream()
-                    .map(visit -> visit.getSurgery().getId())
-                    .collect(Collectors.toList());
-            var surgeries = surgeryRepository.findAll();
-            return surgeries.stream()
-                    .filter(surgery -> !notAvailableSurgeriesIdList.contains(surgery.getId()))
-                    .collect(Collectors.toList())
-                    .get(0);
-        }
+        var notAvailableSurgeriesIdList = visits
+                .stream()
+                .map(visit -> visit.getSurgery().getId())
+                .collect(Collectors.toList());
+        var surgeries = surgeryRepository.findAll();
+        return surgeries.stream()
+                .filter(surgery -> !notAvailableSurgeriesIdList.contains(surgery.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalVisitStateException("No surgery available"));
     }
 }
