@@ -30,7 +30,6 @@ public class VisitService {
     private final SurgeryRepository surgeryRepository;
     private final VetRepository vetRepository;
     private final VisitMapper visitMapper;
-    private final VetMapper vetMapper;
     private final Clock clock;
 
     public List<VisitResponseDto> getAllVisits() {
@@ -101,30 +100,6 @@ public class VisitService {
         visit.setStatus(status);
         var created = visitRepository.save(visit);
         return visitMapper.mapToDto(created);
-    }
-
-    public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) { //todo move it to separate service
-        return vetRepository.findAll().stream()
-                .map(vet -> findFreeSlotsForVet(vet, start, end))
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-    }
-
-    private List<FreeSlotVisitResponseDto> findFreeSlotsForVet(Vet vet, LocalDateTime start, LocalDateTime end) {
-        List<FreeSlotVisitResponseDto> result = new ArrayList<>();
-        LocalDateTime slotTime = start;
-        while (slotTime.isBefore(end)) {
-            if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty() &&
-                    checkIfVetIsAvailable(vet, slotTime, slotTime.plusMinutes(15))) {
-                result.add(new FreeSlotVisitResponseDto(slotTime, vetMapper.mapToDto(vet)));
-            }
-            slotTime = slotTime.plusMinutes(15);
-        }
-        return result;
-    }
-
-    private boolean checkIfVetIsAvailable(Vet vet, LocalDateTime start, LocalDateTime end) {
-        return vet.getAvailabilityFrom().isBefore(start.toLocalTime()) && vet.getAvailabilityTo().isAfter(end.toLocalTime());
     }
 
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {

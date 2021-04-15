@@ -40,18 +40,6 @@ class RestVisitController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(path = "/find", produces = "application/hal+json")
-    //todo move it to separate controller @GET api/v1/timeslots i w requestparam start i end
-    public List<FreeSlotVisitResponseDto> findSlotForVisit(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
-    ) {
-        var freeSlots = visitService.findFreeSlots(start, end);
-        return freeSlots.stream()
-                .map(this::represent)
-                .collect(Collectors.toList());
-    }
-
     @PostMapping(produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     VisitResponseDto createVisit(@Valid @RequestBody VisitRequestDto visitRequestDto) {
@@ -86,9 +74,4 @@ class RestVisitController {
         return representation;
     }
 
-    private FreeSlotVisitResponseDto represent(FreeSlotVisitResponseDto freeSlot) {
-        Link allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withSelfRel();
-        freeSlot.add(allVisits);
-        return freeSlot;
-    }
 }
