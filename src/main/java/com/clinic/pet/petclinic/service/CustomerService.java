@@ -6,6 +6,7 @@ import com.clinic.pet.petclinic.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,19 +18,22 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<CustomerResponseDto> getAllCustomers() {
         log.info("Getting all customers");
         var customers = customerRepository.findAll();
         return mapper.mapListToDto(customers);
     }
 
+    @Transactional(readOnly = true)
     public Optional<CustomerResponseDto> getCustomerById(int id) {
         log.info("Getting customer by id: {}", id);
         return customerRepository.findById(id)
                 .map(mapper::mapToDto);
     }
 
-    public CustomerResponseDto addCustomer(CustomerRequestDto requestDto) {
+    @Transactional
+    public CustomerResponseDto createCustomer(CustomerRequestDto requestDto) {
         log.info("Creating a customer");
         var customer = mapper.mapToEntity(requestDto);
         var createdCustomer = customerRepository.save(customer);

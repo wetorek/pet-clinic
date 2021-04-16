@@ -42,7 +42,7 @@ public class RestCustomerController {
     @PostMapping(produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
-        var customer = customerService.addCustomer(customerRequestDto);
+        var customer = customerService.createCustomer(customerRequestDto);
         return represent(customer);
     }
 
