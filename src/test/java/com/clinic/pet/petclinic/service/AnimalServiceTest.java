@@ -106,6 +106,4 @@ class AnimalServiceTest {
                 new AnimalResponseDto(2, "animal2", LOCAL_DATE_2, "DOG", 1)
         );
     }
-
-
 }
