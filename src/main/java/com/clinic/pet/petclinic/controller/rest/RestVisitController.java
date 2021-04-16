@@ -1,9 +1,11 @@
 package com.clinic.pet.petclinic.controller.rest;
 
-import com.clinic.pet.petclinic.controller.dto.*;
+import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
 import com.clinic.pet.petclinic.service.VisitService;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

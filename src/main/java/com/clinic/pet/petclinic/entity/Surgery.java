@@ -15,7 +15,7 @@ public class Surgery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @NotBlank
     private String name;
 

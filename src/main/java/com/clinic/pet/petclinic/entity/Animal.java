@@ -16,7 +16,7 @@ import java.util.List;
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @NotNull
     private String name;
     private LocalDate dateOfBirth;
@@ -33,5 +33,13 @@ public class Animal {
 
     @PersistenceConstructor
     public Animal() {
+    }
+
+    public Animal(Integer id, String name, LocalDate dateOfBirth, AnimalSpecies species, Customer owner) {
+        this.id = id;
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.species = species;
+        this.owner = owner;
     }
 }

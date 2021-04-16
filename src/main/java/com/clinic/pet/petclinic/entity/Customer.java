@@ -15,7 +15,7 @@ import java.util.List;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @NotNull
     private String name;
     @NotNull
@@ -28,5 +28,11 @@ public class Customer {
 
     @PersistenceConstructor
     public Customer() {
+    }
+
+    public Customer(Integer id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
     }
 }

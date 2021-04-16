@@ -1,9 +1,11 @@
 package com.clinic.pet.petclinic.service;
 
-import com.clinic.pet.petclinic.controller.dto.*;
+import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
 import com.clinic.pet.petclinic.entity.Status;
 import com.clinic.pet.petclinic.entity.Surgery;
-import com.clinic.pet.petclinic.entity.Vet;
 import com.clinic.pet.petclinic.exceptions.ApplicationIllegalArgumentEx;
 import com.clinic.pet.petclinic.exceptions.IllegalVisitStateException;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

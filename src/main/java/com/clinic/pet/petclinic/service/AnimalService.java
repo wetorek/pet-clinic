@@ -38,8 +38,8 @@ public class AnimalService {
         var owner = customerRepository.findById(requestDto.getOwnerID())
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Owner does not exist"));
         Animal animal = mapper.mapToEntity(requestDto, owner);
-        log.info("created new animal id: {}", animal.getId());
         var createdAnimal = animalRepository.save(animal);
+        log.info("created new animal id: {}", createdAnimal.getId());
         return mapper.mapToDto(createdAnimal);
     }
 
