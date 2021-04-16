@@ -33,7 +33,7 @@ public class AnimalService {
                 .map(mapper::mapToDto);
     }
 
-    public AnimalResponseDto addAnimal(AnimalRequestDto requestDto) {
+    public AnimalResponseDto createAnimal(AnimalRequestDto requestDto) {
         log.info("adding a new animal");
         var owner = customerRepository.findById(requestDto.getOwnerID())
                 .orElseThrow(() -> new ApplicationIllegalArgumentEx("Owner does not exist"));

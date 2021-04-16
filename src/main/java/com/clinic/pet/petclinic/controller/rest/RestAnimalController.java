@@ -42,7 +42,7 @@ public class RestAnimalController {
     @PostMapping(produces = "application/hal+json")
     @ResponseStatus(HttpStatus.CREATED)
     AnimalResponseDto createAnimal(@Valid @RequestBody AnimalRequestDto animalRequestDto) {
-        var animal = animalService.addAnimal(animalRequestDto);
+        var animal = animalService.createAnimal(animalRequestDto);
         return represent(animal);
     }
 

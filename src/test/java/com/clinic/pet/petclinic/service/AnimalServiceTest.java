@@ -84,7 +84,7 @@ class AnimalServiceTest {
         when(animalRepository.save(any())).thenReturn(createdAnimal);
         when(animalMapper.mapToDto(any())).thenReturn(mappedAnimal);
 
-        var result = animalService.addAnimal(requestDto);
+        var result = animalService.createAnimal(requestDto);
 
         assertThat(result).isEqualTo(mappedAnimal);
         verify(customerRepository, times(1)).findById(1);
