@@ -40,12 +40,12 @@ class AnimalServiceTest {
     void returnAllAnimals() {
         var animals = createAnimals();
         when(animalRepository.findAll()).thenReturn(animals);
-        var animalResponses = createAnimalResponses();
-        when(animalMapper.mapListToDto(any())).thenReturn(animalResponses);
+        var expected = createAnimalResponses();
+        when(animalMapper.mapListToDto(any())).thenReturn(expected);
 
-        var result = animalService.getAllAnimals();
+        var actual = animalService.getAllAnimals();
 
-        assertThat(result).containsExactlyInAnyOrderElementsOf(animalResponses);
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
         verify(animalRepository, times(1)).findAll();
         verify(animalMapper, times(1)).mapListToDto(animals);
     }
@@ -53,13 +53,13 @@ class AnimalServiceTest {
     @Test
     void returnExistingAnimalById() {
         var animal = createAnimals().get(0);
-        var animalResponseDto = createAnimalResponses().get(0);
+        var expected = createAnimalResponses().get(0);
         when(animalRepository.findById(any())).thenReturn(Optional.of(animal));
-        when(animalMapper.mapToDto(any())).thenReturn(animalResponseDto);
+        when(animalMapper.mapToDto(any())).thenReturn(expected);
 
-        var result = animalService.getAnimalById(1);
+        var actual = animalService.getAnimalById(1);
 
-        assertThat(result).contains(animalResponseDto);
+        assertThat(actual).contains(expected);
         verify(animalRepository, times(1)).findById(1);
         verify(animalMapper, times(1)).mapToDto(animal);
     }
@@ -68,9 +68,9 @@ class AnimalServiceTest {
     void returnNotExistingAnimalById() {
         when(animalRepository.findById(any())).thenReturn(Optional.empty());
 
-        var result = animalService.getAnimalById(1);
+        var actual = animalService.getAnimalById(1);
 
-        assertThat(result).isEmpty();
+        assertThat(actual).isEmpty();
         verify(animalRepository, Mockito.only()).findById(1);
     }
 
@@ -79,14 +79,14 @@ class AnimalServiceTest {
         var requestDto = new AnimalRequestDto("animal1", LOCAL_DATE_1, "CAT", 1);
         var createdAnimal = createAnimals().get(0);
         var owner = createdAnimal.getOwner();
-        var mappedAnimal = createAnimalResponses().get(0);
+        var expected = createAnimalResponses().get(0);
         when(customerRepository.findById(any())).thenReturn(Optional.of(owner));
         when(animalRepository.save(any())).thenReturn(createdAnimal);
-        when(animalMapper.mapToDto(any())).thenReturn(mappedAnimal);
+        when(animalMapper.mapToDto(any())).thenReturn(expected);
 
-        var result = animalService.createAnimal(requestDto);
+        var actual = animalService.createAnimal(requestDto);
 
-        assertThat(result).isEqualTo(mappedAnimal);
+        assertThat(actual).isEqualTo(expected);
         verify(customerRepository, times(1)).findById(1);
         verify(animalRepository, times(1)).save(any());
         verify(animalMapper, times(1)).mapToDto(createdAnimal);

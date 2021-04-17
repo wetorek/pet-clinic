@@ -1,10 +1,14 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+      temp:
+        use_jdbc_metadata_defaults: false
+  flyway:
+    baseline-on-migrate: true
   datasource:
     url: jdbc:postgresql://ec2-54-228-99-58.eu-west-1.compute.amazonaws.com:5432/ddfh8600p4f096
     username: roykwnojfohneh

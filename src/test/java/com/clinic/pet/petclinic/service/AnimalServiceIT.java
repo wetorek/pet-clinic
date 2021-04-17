@@ -46,25 +46,25 @@ public class AnimalServiceIT {
     void getAllAnimals() {
         var expected = createAnimalResponses();
 
-        var result = animalService.getAllAnimals();
+        var actual = animalService.getAllAnimals();
 
-        assertThat(result).containsExactlyInAnyOrderElementsOf(expected);
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
     void getExistingAnimalById() {
         var expected = createAnimalResponses().get(0);
 
-        var result = animalService.getAnimalById(1);
+        var actual = animalService.getAnimalById(1);
 
-        assertThat(result).contains(expected);
+        assertThat(actual).contains(expected);
     }
 
     @Test
     void getNonExistingAnimalById() {
-        var result = animalService.getAnimalById(11);
+        var actual = animalService.getAnimalById(11);
 
-        assertThat(result).isEmpty();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -72,9 +72,9 @@ public class AnimalServiceIT {
         var input = new AnimalRequestDto("Doggo", LOCAL_DATE_1, "DOG", 1);
         var expected = new AnimalResponseDto(3, "Doggo", LOCAL_DATE_1, "DOG", 1);
 
-        var result = animalService.createAnimal(input);
+        var actual = animalService.createAnimal(input);
 
-        assertThat(result).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private List<AnimalResponseDto> createAnimalResponses() {
