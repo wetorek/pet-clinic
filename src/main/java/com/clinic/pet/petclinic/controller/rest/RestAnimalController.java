@@ -4,7 +4,6 @@ import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.service.AnimalService;
 import lombok.AllArgsConstructor;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +17,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api/v1/animals")
+@RequestMapping(value = "/api/v1/animals", produces = "application/hal+json")
 @AllArgsConstructor
 public class RestAnimalController {
     private final AnimalService animalService;
 
-    @GetMapping(produces = "application/hal+json")
+    @GetMapping
     public List<AnimalResponseDto> getAllAnimals() {
         var animals = animalService.getAllAnimals();
         return animals.stream()
@@ -31,7 +30,7 @@ public class RestAnimalController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/{id}", produces = "application/hal+json")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<AnimalResponseDto> getAnimal(@PathVariable @Min(1) int id) {
         return animalService.getAnimalById(id)
                 .map(this::represent)
@@ -39,7 +38,7 @@ public class RestAnimalController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping(produces = "application/hal+json")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     AnimalResponseDto createAnimal(@Valid @RequestBody AnimalRequestDto animalRequestDto) {
         var animal = animalService.createAnimal(animalRequestDto);
@@ -47,8 +46,8 @@ public class RestAnimalController {
     }
 
     private AnimalResponseDto represent(AnimalResponseDto animal) {
-        Link selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(animal.getId())).withSelfRel();
-        Link allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withSelfRel();
+        var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(animal.getId())).withSelfRel();
+        var allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
         var representation = new AnimalResponseDto(animal.getId(), animal.getName(), animal.getDateOfBirth(), animal.getSpecies(), animal.getOwnerId());
         representation.add(selfLink, allAnimals);
         return representation;
