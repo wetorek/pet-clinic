@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS vets
 );
 CREATE TABLE IF NOT EXISTS surgeries
 (
-    id          serial primary key not null,
-    name        varchar(255)       not null
+    id   serial primary key not null,
+    name varchar(255)       not null
 );
 CREATE TABLE IF NOT EXISTS visits
 (

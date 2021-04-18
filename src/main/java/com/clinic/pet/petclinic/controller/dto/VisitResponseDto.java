@@ -16,8 +16,11 @@ public class VisitResponseDto extends RepresentationModel<VisitResponseDto> {
     private int id;
     private LocalDateTime startTime;
     private Duration duration;
-    private String animal;
     private String status;
     private BigDecimal price;
     private String description;
+    private int animalId;
+    private int customerId;
+    private int vetId;
+    private int surgeryId;
 }

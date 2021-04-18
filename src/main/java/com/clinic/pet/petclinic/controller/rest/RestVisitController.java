@@ -66,13 +66,11 @@ class RestVisitController {
         visitService.delete(id);
     }
 
-    private VisitResponseDto represent(VisitResponseDto visit) {
-        Link selfLink = linkTo(methodOn(RestVisitController.class).getVisit(visit.getId())).withSelfRel();
+    private VisitResponseDto represent(VisitResponseDto responseDto) {
+        Link selfLink = linkTo(methodOn(RestVisitController.class).getVisit(responseDto.getId())).withSelfRel();
         Link allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withSelfRel();
-        var representation = new VisitResponseDto(visit.getId(), visit.getStartTime(), visit.getDuration(),
-                visit.getAnimal(), visit.getStatus(), visit.getPrice(), visit.getDescription());
-        representation.add(selfLink, allVisits);
-        return representation;
+        responseDto.add(selfLink, allVisits);
+        return responseDto;
     }
 
 }
