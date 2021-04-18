@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class RestAnimalControllerMVCTest {
+class RestAnimalControllerIT {
     private final String PATH = "/api/v1/animals";
 
     @Autowired
