@@ -85,7 +85,7 @@ public class VisitService {
         visitRepository.deleteById(id);
     }
 
-    @Transactional
+    @Transactional //todo review this ifs once again
     public VisitResponseDto changeDescription(int id, VisitSetDescriptionRequestDto requestDto) {
         var visit = visitRepository.findById(id)
                 .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
@@ -97,7 +97,7 @@ public class VisitService {
         return visitMapper.mapToDto(created);
     }
 
-    @Transactional
+    @Transactional //todo review this ifs once again
     public VisitResponseDto changeVisitStatus(int id, VisitSetStatusRequestDto requestDto) {
         var visit = visitRepository.findById(id)
                 .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
