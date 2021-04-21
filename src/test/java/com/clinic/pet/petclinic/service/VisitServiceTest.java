@@ -1,5 +1,6 @@
 package com.clinic.pet.petclinic.service;
 
+import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
 import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
@@ -14,12 +15,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
@@ -90,7 +94,52 @@ class VisitServiceTest {
         verify(visitRepository, only()).findById(12312);
     }
 
-    //todo write test for creating visit
+//    @Test
+//    void createAStandardVisit(){
+//
+//        LocalDateTime dateTime = LocalDateTime.now(clock);
+//        dateTime.plus(Duration.ofDays(7));
+//        VisitRequestDto requestDto = new VisitRequestDto(dateTime, Duration.ofMinutes(15), 1,"PLANNED",
+//                BigDecimal.valueOf(100), 1, "", 1 );
+//        Customer customer = new Customer(1, "John", "Doe");
+//        Animal animal =  new Animal(1, "animalName", LOCAL_DATE_1, AnimalSpecies.HAMSTER, customer);
+//        Vet vet = new Vet(1, "Wiliam", "Williams", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
+//        Surgery surgery = new Surgery(1, "surgery1");
+//        Visit expected = new Visit(1, dateTime, Duration.ofMinutes(15),
+//                Status.PLANNED, BigDecimal.valueOf(100), "", animal, customer, vet, surgery);
+//        VisitResponseDto responseDto = new VisitResponseDto(1, dateTime, Duration.ofMinutes(15), "PLANNED", BigDecimal.valueOf(100), "", 1,1,1,1);
+//        when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
+//        when(animalRepository.findById(1)).thenReturn(Optional.of(animal));
+//        when(vetRepository.findById(1)).thenReturn(Optional.of(vet));
+//        when(visitMapper.mapToEntity(requestDto, animal, vet,customer, surgery)).thenReturn(expected);
+//        when(visitRepository.save(expected)).thenReturn(expected);
+//        when(visitMapper.mapToDto(expected)).thenReturn(responseDto);
+//
+//        visitService.createVisit(requestDto);
+//    }
+
+
+    @Test
+    void createAOverlappingVisit() {
+        LocalDateTime dateTime = LocalDateTime.now(clock);
+        dateTime.plus(Duration.ofDays(7));
+
+        Customer customer = new Customer(1, "John", "Doe");
+        Animal animal = new Animal(1, "animalName", LOCAL_DATE_1, AnimalSpecies.HAMSTER, customer);
+        Vet vet = new Vet(1, "Wiliam", "Williams", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
+        Surgery surgery = new Surgery(1, "surgery1");
+
+        Visit expected = new Visit(1, dateTime, Duration.ofMinutes(15),
+                Status.PLANNED, BigDecimal.valueOf(100), "", animal, customer, vet, surgery);
+
+        visitRepository.save(expected);
+        VisitRequestDto requestDto = new VisitRequestDto(dateTime, Duration.ofMinutes(15), 1, "PLANNED",
+                BigDecimal.valueOf(100), 1, "", 1);
+
+        when(visitRepository.existOverlapping(requestDto.getStartTime(), requestDto.getStartTime().plus(requestDto.getDuration()))).thenReturn(List.of(expected));
+
+        assertThrows(IllegalVisitStateException.class, () -> visitService.createVisit(requestDto));
+    }
 
     @Test
     void deleteExistingVisit() {
