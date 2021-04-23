@@ -17,9 +17,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -51,8 +53,11 @@ class RestFindVisitControllerIT {
                                 .accept("application/hal+json")
                 )
                 .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print());
-        //todo add assertions here
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$[0].vet.name",is("Walt") ))
+                .andExpect(jsonPath("$[0].vet.surname",is("Kowalski") ))
+                .andExpect(jsonPath("$[0].vet.id",is(1) ));
+
         verify(findVisitService, times(1)).findFreeSlots(LOCAL_DATE_TIME_1, LOCAL_DATE_TIME_2);
     }
 }
