@@ -1,10 +1,26 @@
 stages:
   - build
+  - integration-test
   - deploy
 
 gradle-build:
   image: gradle:6.7.1-jdk11
   stage: build
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+  script:
+    - gradle clean build
+  artifacts:
+    paths:
+      - build/libs/*.jar
+  cache:
+    key: gradle-cache
+    paths:
+      - .gradle/caches
+
+gradle-integration-test:
+  image: gradle:6.7.1-jdk11
+  stage: integration-test
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
   services:
@@ -15,7 +31,7 @@ gradle-build:
     POSTGRES_PASSWORD: password
     POSTGRES_HOST_AUTH_METHOD: trust
   script:
-    - gradle clean build
+    - gradle clean integrationTest
   artifacts:
     paths:
       - build/libs/*.jar

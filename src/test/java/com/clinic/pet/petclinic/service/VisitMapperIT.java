@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class VisitMapperTest {
+class VisitMapperIT {
     private static final LocalDate LOCAL_DATE_1 = LocalDate.of(1999, 7, 12);
     private static final LocalDateTime LOCAL_DATE_TIME_1 = LocalDateTime.of(1999, 7, 12, 10, 0);
 

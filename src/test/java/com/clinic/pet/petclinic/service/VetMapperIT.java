@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class VetMapperTest {
+class VetMapperIT {
     @Autowired
     private VetMapper vetMapper;
 
