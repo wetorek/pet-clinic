@@ -39,3 +39,4 @@ out/
 
 ### db files
 *.db
+/src/generated/
