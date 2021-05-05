@@ -2,6 +2,7 @@
 -- DROP TABLE animals cascade;
 -- DROP TABLE vets cascade;
 -- DROP TABLE visits cascade;
+-- DROP TABLE surgeries cascade;
 -- DROP TABLE flyway_schema_history cascade;
 
 CREATE TABLE IF NOT EXISTS customers
@@ -22,16 +23,17 @@ CREATE TABLE IF NOT EXISTS animals
 );
 CREATE TABLE IF NOT EXISTS vets
 (
-    id           serial primary key not null,
-    availability varchar(255)       not null,
-    image        oid,
-    name         varchar(255)       not null,
-    surname      varchar(255)       not null
+    id                serial primary key not null,
+    image             oid,
+    name              varchar(255)       not null,
+    surname           varchar(255)       not null,
+    availability_from time,
+    availability_to   time
 );
 CREATE TABLE IF NOT EXISTS surgeries
 (
-    id          serial primary key not null,
-    name        varchar(255)       not null
+    id   serial primary key not null,
+    name varchar(255)       not null
 );
 CREATE TABLE IF NOT EXISTS visits
 (

@@ -16,7 +16,7 @@ import java.util.List;
 public class Vet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @NotNull
     private String name;
     @NotNull
@@ -33,5 +33,14 @@ public class Vet {
 
     @PersistenceConstructor
     public Vet() {
+    }
+
+    public Vet(Integer id, String name, String surname, LocalTime availabilityFrom, LocalTime availabilityTo, Byte[] image) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.availabilityFrom = availabilityFrom;
+        this.availabilityTo = availabilityTo;
+        this.image = image;
     }
 }

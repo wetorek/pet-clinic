@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @NotNull
     private LocalDateTime startTime;
     @NotNull

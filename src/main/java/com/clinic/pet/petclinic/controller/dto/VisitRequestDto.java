@@ -1,5 +1,6 @@
 package com.clinic.pet.petclinic.controller.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.time.DurationMax;
 import org.hibernate.validator.constraints.time.DurationMin;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Data
+@AllArgsConstructor
 public class VisitRequestDto {
     @NotNull
     private LocalDateTime startTime;

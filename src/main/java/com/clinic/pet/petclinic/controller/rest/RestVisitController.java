@@ -1,17 +1,17 @@
 package com.clinic.pet.petclinic.controller.rest;
 
-import com.clinic.pet.petclinic.controller.dto.*;
+import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
 import com.clinic.pet.petclinic.service.VisitService;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,12 +19,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api/v1/visits")
+@RequestMapping(value = "/api/v1/visits", produces = "application/hal+json")
 @AllArgsConstructor
 class RestVisitController {
     private final VisitService visitService;
 
-    @GetMapping(produces = "application/hal+json")
+    @GetMapping
     public List<VisitResponseDto> getAllVisits() {
         var visits = visitService.getAllVisits();
         return visits.stream()
@@ -32,7 +32,7 @@ class RestVisitController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/{id}", produces = "application/hal+json")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<VisitResponseDto> getVisit(@PathVariable @Min(1) int id) {
         return visitService.getVisitById(id)
                 .map(this::represent)
@@ -40,20 +40,20 @@ class RestVisitController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping(produces = "application/hal+json")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     VisitResponseDto createVisit(@Valid @RequestBody VisitRequestDto visitRequestDto) {
         var visit = visitService.createVisit(visitRequestDto);
         return represent(visit);
     }
 
-    @PatchMapping(path = "/{id}/status", produces = "application/hal+json")
+    @PatchMapping(path = "/{id}/status")
     public VisitResponseDto changeVisitStatus(@PathVariable @Min(1) int id, @RequestBody VisitSetStatusRequestDto requestDto) {
         var visit = visitService.changeVisitStatus(id, requestDto);
         return represent(visit);
     }
 
-    @PatchMapping(path = "/{id}/description", produces = "application/hal+json")
+    @PatchMapping(path = "/{id}/description")
     public VisitResponseDto changeDescriptionVisit(@PathVariable @Min(1) int id, @RequestBody VisitSetDescriptionRequestDto requestDto) {
         var visit = visitService.changeDescription(id, requestDto);
         return represent(visit);
@@ -65,13 +65,11 @@ class RestVisitController {
         visitService.delete(id);
     }
 
-    private VisitResponseDto represent(VisitResponseDto visit) {
-        Link selfLink = linkTo(methodOn(RestVisitController.class).getVisit(visit.getId())).withSelfRel();
-        Link allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withSelfRel();
-        var representation = new VisitResponseDto(visit.getId(), visit.getStartTime(), visit.getDuration(),
-                visit.getAnimal(), visit.getStatus(), visit.getPrice(), visit.getDescription());
-        representation.add(selfLink, allVisits);
-        return representation;
+    private VisitResponseDto represent(VisitResponseDto responseDto) {
+        var selfLink = linkTo(methodOn(RestVisitController.class).getVisit(responseDto.getId())).withSelfRel();
+        var allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withRel("allVisits");
+        responseDto.add(selfLink, allVisits);
+        return responseDto;
     }
 
 }

@@ -37,6 +37,21 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+compileJava{
+    options.setAnnotationProcessorGeneratedSourcesDirectory( file("$projectDir/src/generated/java"))
+}
+
+clean{
+    delete "$projectDir/src/generated"
+}
+
 test {
     useJUnitPlatform()
+    exclude '**/*IT*'
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform()
+    include '**/*IT*'
+    description = "Runs Integration Tests"
 }

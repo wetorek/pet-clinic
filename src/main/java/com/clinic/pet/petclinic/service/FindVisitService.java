@@ -7,6 +7,7 @@ import com.clinic.pet.petclinic.repository.VisitRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class FindVisitService {
     private final VisitRepository visitRepository;
     private final VetMapper vetMapper;
 
+    @Transactional(readOnly = true)
     public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
         log.info("Finding free slots between: {} and {}", start, end);
         return vetRepository.findAll().stream()

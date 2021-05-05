@@ -14,7 +14,10 @@ import java.util.List;
 public interface VisitMapper {
 
     @Mappings({
-            @Mapping(target = "animal", source = "animal.id")
+            @Mapping(target = "animalId", source = "animal.id"),
+            @Mapping(target = "customerId", source = "customer.id"),
+            @Mapping(target = "vetId", source = "vet.id"),
+            @Mapping(target = "surgeryId", source = "surgery.id"),
     })
     VisitResponseDto mapToDto(Visit visit);
 

@@ -1,9 +1,11 @@
 package com.clinic.pet.petclinic.service;
 
-import com.clinic.pet.petclinic.controller.dto.*;
+import com.clinic.pet.petclinic.controller.dto.VisitRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetDescriptionRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VisitSetStatusRequestDto;
 import com.clinic.pet.petclinic.entity.Status;
 import com.clinic.pet.petclinic.entity.Surgery;
-import com.clinic.pet.petclinic.entity.Vet;
 import com.clinic.pet.petclinic.exceptions.ApplicationIllegalArgumentEx;
 import com.clinic.pet.petclinic.exceptions.IllegalVisitStateException;
 import com.clinic.pet.petclinic.exceptions.VisitNotFoundException;
@@ -11,11 +13,11 @@ import com.clinic.pet.petclinic.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,18 +34,21 @@ public class VisitService {
     private final VisitMapper visitMapper;
     private final Clock clock;
 
+    @Transactional(readOnly = true)
     public List<VisitResponseDto> getAllVisits() {
         log.info("Getting all Visits");
         var visits = visitRepository.findAll();
         return visitMapper.mapListToDto(visits);
     }
 
+    @Transactional(readOnly = true)
     public Optional<VisitResponseDto> getVisitById(int id) {
         log.info("Getting Visit by id: {}", id);
         return visitRepository.findById(id)
                 .map(visitMapper::mapToDto);
     }
 
+    @Transactional
     public VisitResponseDto createVisit(VisitRequestDto requestDto) {
         log.info("Creating a Visit");
         if (checkIfVisitOverlaps(requestDto)) {
@@ -71,6 +76,7 @@ public class VisitService {
         return visitMapper.mapToDto(createdVisit);
     }
 
+    @Transactional
     public void delete(int id) {
         if (!visitRepository.existsById(id)) {
             log.error("Visit is not found: {}", id);
@@ -80,6 +86,7 @@ public class VisitService {
         visitRepository.deleteById(id);
     }
 
+    @Transactional
     public VisitResponseDto changeDescription(int id, VisitSetDescriptionRequestDto requestDto) {
         log.info("Changing visit (id: {}) description", id);
         var visit = visitRepository.findById(id)
@@ -93,6 +100,7 @@ public class VisitService {
         return visitMapper.mapToDto(created);
     }
 
+    @Transactional
     public VisitResponseDto changeVisitStatus(int id, VisitSetStatusRequestDto requestDto) {
         log.info("Changing visit status");
         var visit = visitRepository.findById(id)

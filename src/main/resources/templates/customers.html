@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css" rel="stylesheet">
     <title>Customers</title>
 </head>
 <body>
@@ -29,49 +29,49 @@
         </table>
     </div>
 </div>
-    <div style="text-align: center; margin-top: 3rem;">
-        <button  id="btn-add"> ADD CUSTOMER </button>
-    </div>
+<div style="text-align: center; margin-top: 3rem;">
+    <button id="btn-add"> ADD CUSTOMER</button>
+</div>
 
-    <form style="display: none;">
-        <label>NAME
-            <input type="text" name="name">
-        </label>
-        <label>SURNAME
-            <input type="text" name="surname">
-        </label>
-        <button type="submit" id="send-button" style="display: none;"> SEND FORM!</button>
-    </form>
+<form style="display: none;">
+    <label>NAME
+        <input name="name" type="text">
+    </label>
+    <label>SURNAME
+        <input name="surname" type="text">
+    </label>
+    <button id="send-button" style="display: none;" type="submit"> SEND FORM!</button>
+</form>
 
-    <script>
-        document.getElementById("btn-add").addEventListener("click", function (){
-            document.querySelector('form').style.display = 'block';
-            document.getElementById("send-button").style.display = 'block';
-        }, false);
+<script>
+    document.getElementById("btn-add").addEventListener("click", function () {
+        document.querySelector('form').style.display = 'block';
+        document.getElementById("send-button").style.display = 'block';
+    }, false);
 
 
-        const form = document.querySelector('form');
+    const form = document.querySelector('form');
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const resp = await fetch('/api/customers', {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: form.elements.name.value,
-                    surname: form.elements.surname.value
-                })
-            });
-            if (resp.ok) {
-                form.reset();
-                window.location.reload(true);
-            }
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const resp = await fetch('/api/customers', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: form.elements.name.value,
+                surname: form.elements.surname.value
+            })
         });
+        if (resp.ok) {
+            form.reset();
+            window.location.reload(true);
+        }
+    });
 
-    </script>
+</script>
 
 </body>
 </html>

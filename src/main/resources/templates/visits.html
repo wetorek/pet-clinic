@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css" rel="stylesheet">
     <title>Visits</title>
 </head>
 <body>
@@ -37,60 +37,60 @@
 </div>
 
 
-    <div style="text-align: center; margin-top: 3rem;">
-        <button  id="btn-add"> ADD VISIT</button>
-    </div>
+<div style="text-align: center; margin-top: 3rem;">
+    <button id="btn-add"> ADD VISIT</button>
+</div>
 
-    <form style="display: none;">
-        <label>START TIME
-            <input type="datetime-local" name="start">
-        </label>
-        <label>DURATION
-            <input type="text" name="duration">
-        </label>
-        <label>ANIMAL ID
-            <input type="number" name="animalID">
-        </label>
-        <label>PRICE
-            <input type="number" name="price">
-        </label>
-        <label>OWNER ID
-            <input type="number" name="ownerID">
-        </label>
-        <button type="submit" id="send-button" style="display: none;">SEND FORM!</button>
-    </form>
+<form style="display: none;">
+    <label>START TIME
+        <input name="start" type="datetime-local">
+    </label>
+    <label>DURATION
+        <input name="duration" type="text">
+    </label>
+    <label>ANIMAL ID
+        <input name="animalID" type="number">
+    </label>
+    <label>PRICE
+        <input name="price" type="number">
+    </label>
+    <label>OWNER ID
+        <input name="ownerID" type="number">
+    </label>
+    <button id="send-button" style="display: none;" type="submit">SEND FORM!</button>
+</form>
 
-    <script>
-        document.getElementById("btn-add").addEventListener("click", function (){
-            document.querySelector('form').style.display = 'block';
-            document.getElementById("send-button").style.display = 'block';
-        }, false);
+<script>
+    document.getElementById("btn-add").addEventListener("click", function () {
+        document.querySelector('form').style.display = 'block';
+        document.getElementById("send-button").style.display = 'block';
+    }, false);
 
 
-        const form = document.querySelector('form');
+    const form = document.querySelector('form');
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const resp = await fetch('/api/visits', {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    startTime: form.elements.start.value,
-                    duration: form.elements.duration.value,
-                    animalId: form.elements.animalID.value,
-                    status: "PLANNED",
-                    price: form.elements.price.value,
-                    customerID: form.elements.ownerID.value
-                })
-            });
-            if (resp.ok) {
-                form.reset();
-                window.location.reload(true);
-            }
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const resp = await fetch('/api/visits', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                startTime: form.elements.start.value,
+                duration: form.elements.duration.value,
+                animalId: form.elements.animalID.value,
+                status: "PLANNED",
+                price: form.elements.price.value,
+                customerID: form.elements.ownerID.value
+            })
         });
-    </script>
+        if (resp.ok) {
+            form.reset();
+            window.location.reload(true);
+        }
+    });
+</script>
 </body>
 </html>
