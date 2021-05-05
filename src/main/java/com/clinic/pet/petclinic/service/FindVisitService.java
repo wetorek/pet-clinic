@@ -22,6 +22,7 @@ public class FindVisitService {
     private final VetMapper vetMapper;
 
     public List<FreeSlotVisitResponseDto> findFreeSlots(LocalDateTime start, LocalDateTime end) {
+        log.info("Finding free slots between: {} and {}", start, end);
         return vetRepository.findAll().stream()
                 .map(vet -> findFreeSlotsForVet(vet, start, end))
                 .flatMap(List::stream)
@@ -32,6 +33,7 @@ public class FindVisitService {
         List<FreeSlotVisitResponseDto> result = new ArrayList<>();
         LocalDateTime slotTime = start;
         while (slotTime.isBefore(end)) {
+            log.info("Checking available visit between: {} and {}", slotTime, slotTime.plusMinutes(15));
             if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty() &&
                     checkIfVetIsAvailable(vet, slotTime, slotTime.plusMinutes(15))) {
                 result.add(new FreeSlotVisitResponseDto(slotTime, vetMapper.mapToDto(vet)));

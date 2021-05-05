@@ -76,10 +76,12 @@ public class VisitService {
             log.error("Visit is not found: {}", id);
             throw new VisitNotFoundException("Visit not found: " + id);
         }
+        log.info("visit is deleting");
         visitRepository.deleteById(id);
     }
 
     public VisitResponseDto changeDescription(int id, VisitSetDescriptionRequestDto requestDto) {
+        log.info("Changing visit (id: {}) description", id);
         var visit = visitRepository.findById(id)
                 .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
         if ((visit.getStatus() != Status.FINISHED) && (visit.getStatus() != Status.NOT_APPEARED)) {
@@ -87,10 +89,12 @@ public class VisitService {
         }
         visit.setDescription(requestDto.getDescription());
         var created = visitRepository.save(visit);
+        log.info("Visit (id: {}) description was changed on: {}", id, requestDto.getDescription());
         return visitMapper.mapToDto(created);
     }
 
     public VisitResponseDto changeVisitStatus(int id, VisitSetStatusRequestDto requestDto) {
+        log.info("Changing visit status");
         var visit = visitRepository.findById(id)
                 .orElseThrow(() -> new VisitNotFoundException("Visit not found: " + id));
         var status = visitMapper.mapStringToStatus(requestDto.getStatus());
@@ -99,6 +103,7 @@ public class VisitService {
         }
         visit.setStatus(status);
         var created = visitRepository.save(visit);
+        log.info("Visit (id: {}) status was changed on: {}", id, requestDto.getStatus());
         return visitMapper.mapToDto(created);
     }
 
@@ -130,6 +135,9 @@ public class VisitService {
         return surgeryRepository.findAll().stream()
                 .filter(surgery -> !notAvailableSurgeriesIdList.contains(surgery.getId()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalVisitStateException("No surgery available"));
+                .orElseThrow(() -> {
+                    log.error("No surgery available");
+                    return new IllegalVisitStateException("No surgery available");
+                });
     }
 }
