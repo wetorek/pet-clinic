@@ -39,6 +39,7 @@ public class FindVisitService {
             if (visitRepository.existVisitBetweenTime(vet.getId(), slotTime, slotTime.plusMinutes(15)).isEmpty() &&
                     checkIfVetIsAvailable(vet, slotTime, slotTime.plusMinutes(15))) {
                 result.add(new FreeSlotVisitResponseDto(slotTime, vetMapper.mapToDto(vet)));
+                log.info("Timeslot found: {} for Vet:{}", slotTime, vet.getId());
             }
             slotTime = slotTime.plusMinutes(15);
         }

@@ -20,7 +20,7 @@ import java.util.Map;
 public class RestExceptionAdvice {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(IllegalVisitStateException.class)
-    ErrorResponse handleConflict(IllegalVisitStateException ex) {
+    ErrorResponse handleApplicationConflict(IllegalVisitStateException ex) {
         return ErrorResponse.builder()
                 .errorCode("Illegal operation performed")
                 .status(HttpStatus.CONFLICT.value())
@@ -31,7 +31,7 @@ public class RestExceptionAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ApplicationIllegalArgumentEx.class)
-    ErrorResponse handleConflict(ApplicationIllegalArgumentEx ex) {
+    ErrorResponse handleApplicationIllegalArgument(ApplicationIllegalArgumentEx ex) {
         return ErrorResponse.builder()
                 .errorCode("Illegal argument given")
                 .status(HttpStatus.BAD_REQUEST.value())

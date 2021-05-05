@@ -82,7 +82,7 @@ public class VisitService {
             log.error("Visit is not found: {}", id);
             throw new VisitNotFoundException("Visit not found: " + id);
         }
-        log.info("visit is deleting");
+        log.info("Deleting visit: {}", id);
         visitRepository.deleteById(id);
     }
 
@@ -96,7 +96,7 @@ public class VisitService {
         }
         visit.setDescription(requestDto.getDescription());
         var created = visitRepository.save(visit);
-        log.info("Visit (id: {}) description was changed on: {}", id, requestDto.getDescription());
+        log.info("Visit id: {} description was changed to: {}", id, requestDto.getDescription());
         return visitMapper.mapToDto(created);
     }
 
@@ -111,7 +111,7 @@ public class VisitService {
         }
         visit.setStatus(status);
         var created = visitRepository.save(visit);
-        log.info("Visit (id: {}) status was changed on: {}", id, requestDto.getStatus());
+        log.info("Visit id: {} status was changed to: {}", id, requestDto.getStatus());
         return visitMapper.mapToDto(created);
     }
 

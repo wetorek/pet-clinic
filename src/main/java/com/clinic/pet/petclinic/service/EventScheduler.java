@@ -20,7 +20,7 @@ public class EventScheduler {
     @Scheduled(fixedRate = 3_600_000)
     @Transactional
     public void endingVisits() {
-        log.info("ending visits");
+        log.info("Ending visits");
         var localDateTime = LocalDateTime.now(clock);
         visitRepository.automaticEndingVisits(localDateTime);
     }
