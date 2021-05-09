@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://igoradamenko.github.io/awsm.css/css/awsm.min.css" rel="stylesheet">
+    <title>Vets</title>
+</head>
+<body>
+<div th:switch="${vets}">
+    <div style="text-align: center" th:case="*">
+        <h2>Vets <span th:text="${#lists.size(vets)}"></span></h2>
+        <table th:class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Surname</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="vet : ${vets}">
+                <td th:text="${vet.id}"></td>
+                <td th:text="${vet.name}"></td>
+                <td th:text="${vet.surname}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
