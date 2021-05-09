@@ -22,4 +22,7 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
 
     @Query("select v from Visit v where(v.vet.id = :id and ( (v.startTime >= :startTime and v.startTime <= :endTime) or ( (v.startTime + v.duration) >= :startTime and (v.startTime + v.duration) <= :endTime  ) ) )")
     List<Visit> existVisitBetweenTime(@Param("id") Integer id, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
+
+    @Query("select v from Visit v where v.vet.id = :id")
+    List<Visit> vetsVisits(@Param("id") Integer id);
 }

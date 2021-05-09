@@ -115,6 +115,13 @@ public class VisitService {
         return visitMapper.mapToDto(created);
     }
 
+    @Transactional
+    public List<VisitResponseDto> allVisitsWithVet(int id){
+        log.info("Getting all vet's id: {} visits", id);
+        var visits = visitRepository.vetsVisits(id);
+        return visitMapper.mapListToDto(visits);
+    }
+
     private boolean checkIfVisitOverlaps(VisitRequestDto requestDto) {
         LocalDateTime endTime = requestDto.getStartTime().plus(requestDto.getDuration());
         return !visitRepository.existOverlapping(requestDto.getStartTime(), endTime).isEmpty();

@@ -2,12 +2,13 @@ package com.clinic.pet.petclinic.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
-public class VetResponseDto {
+public class VetResponseDto extends RepresentationModel<VisitResponseDto> {
     private int id;
     private String name;
     private String surname;
