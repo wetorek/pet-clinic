@@ -72,10 +72,9 @@
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const resp = await fetch('/api/animals', {
+        const resp = await fetch('/api/v1/animals', {
             method: 'post',
             headers: {
-                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -88,6 +87,8 @@
         if (resp.ok) {
             form.reset();
             window.location.reload(true);
+        }else {
+            alert("You should input a correct value");
         }
     });
 </script>
