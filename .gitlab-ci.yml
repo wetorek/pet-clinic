@@ -13,6 +13,9 @@ gradle-build:
   artifacts:
     paths:
       - build/libs/*.jar
+    reports:
+      junit: build/test-results/unit-tests/**/UNIT-TEST-*.xml
+
   cache:
     key: gradle-cache
     paths:
@@ -35,6 +38,8 @@ gradle-integration-test:
   artifacts:
     paths:
       - build/libs/*.jar
+    reports:
+      junit: build/test-results/integration-tests/**/INTEGRATION-TEST-*.xml
   cache:
     key: gradle-cache
     paths:
