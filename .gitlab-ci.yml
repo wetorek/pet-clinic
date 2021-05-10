@@ -13,6 +13,7 @@ gradle-build:
   artifacts:
     paths:
       - build/libs/*.jar
+    when: always
     reports:
       junit: build/test-results/test/**/TEST-*.xml
 
@@ -38,6 +39,10 @@ gradle-integration-test:
   artifacts:
     paths:
       - build/libs/*.jar
+    when: always
+    reports:
+      junit: build/test-results/integrationTest/**/TEST-*.xml
+
   cache:
     key: gradle-cache
     paths:
