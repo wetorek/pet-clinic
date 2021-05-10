@@ -1,7 +1,7 @@
 package com.clinic.pet.petclinic.service;
 
-import com.clinic.pet.petclinic.controller.dto.*;
-import com.clinic.pet.petclinic.repository.CustomerRepository;
+import com.clinic.pet.petclinic.controller.dto.VetRequestDto;
+import com.clinic.pet.petclinic.controller.dto.VetResponseDto;
 import com.clinic.pet.petclinic.repository.VetRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

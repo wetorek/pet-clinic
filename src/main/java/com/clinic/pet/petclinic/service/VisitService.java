@@ -116,7 +116,7 @@ public class VisitService {
     }
 
     @Transactional
-    public List<VisitResponseDto> allVisitsWithVet(int id){
+    public List<VisitResponseDto> allVisitsWithVet(int id) {
         log.info("Getting all vet's id: {} visits", id);
         var visits = visitRepository.vetsVisits(id);
         return visitMapper.mapListToDto(visits);

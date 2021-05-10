@@ -22,6 +22,11 @@ spring:
     url: jdbc:postgresql://ec2-54-228-99-58.eu-west-1.compute.amazonaws.com:5432/ddfh8600p4f096
     username: roykwnojfohneh
     password: b133692c560ce79d59bd33c872b8617a86a6631330b49a687d4331e3695a613c
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
 
 ---
 

@@ -2,7 +2,6 @@ package com.clinic.pet.petclinic.controller.rest;
 
 import com.clinic.pet.petclinic.controller.dto.VetRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VetResponseDto;
-import com.clinic.pet.petclinic.controller.dto.VisitResponseDto;
 import com.clinic.pet.petclinic.service.VetService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -91,13 +91,13 @@
                 price: form.elements.price.value,
                 customerID: form.elements.ownerID.value,
                 description: "",
-                vetId:  form.elements.vetID.value
+                vetId: form.elements.vetID.value
             })
         });
         if (resp.ok) {
             form.reset();
             window.location.reload(true);
-        }else {
+        } else {
             alert("You should input a correct value");
         }
     });

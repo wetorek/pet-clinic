@@ -41,7 +41,7 @@ class RestVisitController {
     }
 
     @GetMapping("/vet/{id}")
-    public List<VisitResponseDto> getAllVisitsWithVet(@PathVariable @Min(1) int id){
+    public List<VisitResponseDto> getAllVisitsWithVet(@PathVariable @Min(1) int id) {
         var visits = visitService.allVisitsWithVet(id);
         return visits.stream()
                 .map(this::represent)

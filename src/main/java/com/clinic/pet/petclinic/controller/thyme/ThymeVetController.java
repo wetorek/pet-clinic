@@ -1,7 +1,6 @@
 package com.clinic.pet.petclinic.controller.thyme;
 
 import com.clinic.pet.petclinic.service.VetService;
-import com.clinic.pet.petclinic.service.VisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
