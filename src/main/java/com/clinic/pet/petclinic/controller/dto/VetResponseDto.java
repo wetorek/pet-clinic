@@ -14,6 +14,7 @@ public class VetResponseDto extends RepresentationModel<VisitResponseDto> {
     private int id;
     private String name;
     private String surname;
+    private String username;
     private LocalTime availabilityFrom;
     private LocalTime availabilityTo;
 }

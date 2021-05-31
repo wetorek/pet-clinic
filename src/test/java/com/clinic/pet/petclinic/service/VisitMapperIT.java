@@ -58,7 +58,7 @@ class VisitMapperIT {
     private Visit createVisit() {
         var owner = new Customer(1, "John", "Doe");
         var animal = new Animal(1, "animal1", LOCAL_DATE_1, AnimalSpecies.CAT, owner);
-        var vet = new Vet(1, "Walt", "Kowalski", LocalTime.of(8, 0), LocalTime.of(16, 0), null);
+        var vet = new Vet(1, "Walt", "Kowalski", LocalTime.of(8, 0), LocalTime.of(16, 0));
         var surgery = new Surgery(1, "Surgery 1");
         return new Visit(1, LOCAL_DATE_TIME_1, Duration.ofMinutes(20), Status.PLANNED, BigDecimal.TEN, "", animal, owner, vet, surgery);
     }

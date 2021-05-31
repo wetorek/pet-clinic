@@ -5,11 +5,10 @@ import com.clinic.pet.petclinic.controller.dto.VetResponseDto;
 import com.clinic.pet.petclinic.service.FindVisitService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -24,8 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = RestFindVisitController.class)
+@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false)
 class RestFindVisitControllerIT {
     private static final LocalDateTime LOCAL_DATE_TIME_1 = LocalDateTime.of(2021, 7, 12, 10, 0);
     private static final LocalDateTime LOCAL_DATE_TIME_2 = LocalDateTime.of(2021, 7, 12, 15, 0);
@@ -39,7 +38,8 @@ class RestFindVisitControllerIT {
 
     @Test
     void getAllTimeSlots() throws Exception {
-        var vetResponseDto = new VetResponseDto(1, "Walt", "Kowalski", LocalTime.of(8, 0), LocalTime.of(16, 0));
+        var vetResponseDto = new VetResponseDto(1, "Walt", "Kowalski", "walt123",
+                LocalTime.of(8, 0), LocalTime.of(16, 0));
         var timeslots = List.of(
                 new FreeSlotVisitResponseDto(LOCAL_DATE_TIME_1, vetResponseDto)
         );

@@ -3,20 +3,22 @@ package com.clinic.pet.petclinic.entity;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.PersistenceConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalTime;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "vets")
 @Entity
 @Data
 @AllArgsConstructor
-public class Vet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Vet extends User {
     @NotNull
     private String name;
     @NotNull
@@ -35,12 +37,19 @@ public class Vet {
     public Vet() {
     }
 
-    public Vet(Integer id, String name, String surname, LocalTime availabilityFrom, LocalTime availabilityTo, Byte[] image) {
-        this.id = id;
+    public Vet(Integer id, String name, String surname, LocalTime availabilityFrom, LocalTime availabilityTo) {
+        super(id, null, null, Role.VET, AccountState.ACTIVE);
         this.name = name;
         this.surname = surname;
         this.availabilityFrom = availabilityFrom;
         this.availabilityTo = availabilityTo;
-        this.image = image;
+    }
+
+    public Vet(Integer id, String username, String name, String surname, LocalTime availabilityFrom, LocalTime availabilityTo) {
+        super(id, username, null, Role.VET, AccountState.ACTIVE);
+        this.name = name;
+        this.surname = surname;
+        this.availabilityFrom = availabilityFrom;
+        this.availabilityTo = availabilityTo;
     }
 }

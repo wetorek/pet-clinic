@@ -13,6 +13,10 @@ public class VetRequestDto {
     private String name;
     @NotBlank(message = "surname is required")
     private String surname;
+    @NotBlank(message = "username is required")
+    private String username;
+    @NotBlank(message = "password is required")
+    private String password;
     @NotNull
     private LocalTime availabilityFrom;
     @NotNull

@@ -41,7 +41,7 @@ public class FindVisitServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2022, 4, 12, 15, 0, 0);
         LocalDateTime time2 = LocalDateTime.of(2022, 4, 12, 15, 0, 0);
 
-        Vet vet = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
+        Vet vet = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0));
         List<Vet> vets = List.of(vet);
 
         when(vetRepository.findAll()).thenReturn(vets);
@@ -54,7 +54,7 @@ public class FindVisitServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2022, 4, 12, 15, 0, 0);
         LocalDateTime time2 = LocalDateTime.of(2022, 4, 12, 15, 15, 0);
 
-        Vet vet = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
+        Vet vet = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0));
         List<Vet> vets = List.of(vet);
 
         when(vetRepository.findAll()).thenReturn(vets);
@@ -66,8 +66,8 @@ public class FindVisitServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2022, 4, 12, 14, 0, 0);
         LocalDateTime time2 = LocalDateTime.of(2022, 4, 12, 15, 15, 0);
 
-        Vet vet1 = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
-        Vet vet2 = new Vet(2, "Alex", "Smith", LocalTime.of(9, 0), LocalTime.of(15, 0), null);
+        Vet vet1 = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0));
+        Vet vet2 = new Vet(2, "Alex", "Smith", LocalTime.of(9, 0), LocalTime.of(15, 0));
         List<Vet> vets = List.of(vet1, vet2);
 
         when(vetRepository.findAll()).thenReturn(vets);
@@ -84,9 +84,9 @@ public class FindVisitServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2022, 4, 12, 14, 0, 0);
         LocalDateTime time2 = LocalDateTime.of(2022, 4, 12, 15, 15, 0);
 
-        Vet vet1 = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
-        Vet vet2 = new Vet(2, "Alex", "Smith", LocalTime.of(9, 0), LocalTime.of(10, 0), null);
-        Vet vet3 = new Vet(3, "Wiliam", "Smith", LocalTime.of(9, 0), LocalTime.of(14, 0), null);
+        Vet vet1 = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0));
+        Vet vet2 = new Vet(2, "Alex", "Smith", LocalTime.of(9, 0), LocalTime.of(10, 0));
+        Vet vet3 = new Vet(3, "Wiliam", "Smith", LocalTime.of(9, 0), LocalTime.of(14, 0));
         List<Vet> vets = List.of(vet1, vet2, vet3);
 
         when(vetRepository.findAll()).thenReturn(vets);
@@ -98,9 +98,9 @@ public class FindVisitServiceTest {
         LocalDateTime time1 = LocalDateTime.of(2022, 4, 12, 20, 0, 0);
         LocalDateTime time2 = LocalDateTime.of(2022, 4, 12, 20, 15, 0);
 
-        Vet vet1 = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
-        Vet vet2 = new Vet(2, "Alex", "Smith", LocalTime.of(9, 0), LocalTime.of(10, 0), null);
-        Vet vet3 = new Vet(3, "Wiliam", "Smith", LocalTime.of(9, 0), LocalTime.of(14, 0), null);
+        Vet vet1 = new Vet(1, "John", "Doe", LocalTime.of(10, 0), LocalTime.of(18, 0));
+        Vet vet2 = new Vet(2, "Alex", "Smith", LocalTime.of(9, 0), LocalTime.of(10, 0));
+        Vet vet3 = new Vet(3, "Wiliam", "Smith", LocalTime.of(9, 0), LocalTime.of(14, 0));
 
         List<Vet> vets = List.of(vet1, vet2, vet3);
 
