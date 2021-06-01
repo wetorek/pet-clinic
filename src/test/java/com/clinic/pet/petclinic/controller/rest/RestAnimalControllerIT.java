@@ -51,8 +51,7 @@ class RestAnimalControllerIT {
                 .andExpect(jsonPath("$[0].dateOfBirth", is("1999-07-12")))
                 .andExpect(jsonPath("$[0].species", is("CAT")))
                 .andExpect(jsonPath("$[0].ownerId", is(1)))
-                .andExpect(jsonPath("$[0].links[?(@.rel=='self')].href", hasItem(endsWithIgnoringCase("/api/v1/animals/1"))))
-                .andExpect(jsonPath("$[0].links[?(@.rel=='allAnimals')].href", hasItem(endsWithIgnoringCase("/api/v1/animals"))));
+                .andExpect(jsonPath("$[0].links[?(@.rel=='self')].href", hasItem(endsWithIgnoringCase("/api/v1/animals/1"))));
         verify(animalService, times(1)).getAllAnimals();
     }
 
@@ -71,8 +70,7 @@ class RestAnimalControllerIT {
                 .andExpect(jsonPath("$.dateOfBirth", is("1999-07-12")))
                 .andExpect(jsonPath("$.species", is("CAT")))
                 .andExpect(jsonPath("$.ownerId", is(1)))
-                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/animals/1"))))
-                .andExpect(jsonPath("$._links.allAnimals.href", is(endsWithIgnoringCase("/api/v1/animals"))));
+                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/animals/1"))));
         verify(animalService, times(1)).getAnimalById(1);
     }
 
@@ -107,8 +105,7 @@ class RestAnimalControllerIT {
                 .andExpect(jsonPath("$.dateOfBirth", is("1999-07-12")))
                 .andExpect(jsonPath("$.species", is("CAT")))
                 .andExpect(jsonPath("$.ownerId", is(1)))
-                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/animals/1"))))
-                .andExpect(jsonPath("$._links.allAnimals.href", is(endsWithIgnoringCase("/api/v1/animals"))));
+                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/animals/1"))));
         verify(animalService, times(1)).createAnimal(requestDto);
     }
 }

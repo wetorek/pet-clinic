@@ -95,7 +95,7 @@ class RestCustomerControllerIT {
                                 .contentType("application/json")
                                 .accept("application/hal+json")
                                 .content(objectMapper.writeValueAsString(customerRequest)))
-                .andExpect(status().isCreated())
+                .andExpect(status().is2xxSuccessful())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Walt")))
