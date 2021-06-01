@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -20,23 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(path = "/users", produces = "application/hal+json")
 @AllArgsConstructor
 public class RestUsersController {
-    private final VetService vetService;
-    private final CustomerService customerService;
     private final UserService userService;
-
-    @PostMapping("/vets")
-    @ResponseStatus(HttpStatus.CREATED)
-    VetResponseDto createVet(@RequestBody VetRequestDto vetRequestDto) {
-        var vet = vetService.createVet(vetRequestDto);
-        return represent(vet);
-    }
-
-    @PostMapping("/customers")
-    @ResponseStatus(HttpStatus.CREATED)
-    CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
-        var customer = customerService.createCustomer(customerRequestDto);
-        return represent(customer);
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,46 +32,34 @@ public class RestUsersController {
 
     @GetMapping
     List<UserResponseDto> getAllUsers() {
-        return null;
+        var users = userService.getAllUsers();
+        return users.stream()
+                .map(this::represent)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable @Min(1) int id) {
-        return null;
+        return userService.getUserById(id)
+                .map(this::represent)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PatchMapping("/activate/{id}")
     public void activateUser(@PathVariable @Min(1) int id) {
-
+        userService.activateUser(id);
     }
 
     @PatchMapping("/deactivate/{id}")
     public void deactivateUser(@PathVariable @Min(1) int id) {
-
+        userService.deactivateUser(id);
     }
 
-    private VetResponseDto represent(VetResponseDto responseDto) { //todo extract to controller.rest.utils
-        var selfLink = linkTo(methodOn(RestVetController.class).getVet(responseDto.getId())).withSelfRel();
-        var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
-        var allVisits = linkTo(methodOn(RestVisitController.class).getAllVisitsWithVet(responseDto.getId())).withRel("allVetsVisit");
-        responseDto.add(selfLink, allVets, allVisits);
-        return responseDto;
-    }
-
-    private CustomerResponseDto represent(CustomerResponseDto customer) {
-        var selfLink = linkTo(methodOn(RestCustomerController.class).getCustomer(customer.getId())).withSelfRel();
-        var allCustomers = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allCustomers");
-        var representation = new CustomerResponseDto(customer.getId(), customer.getName(), customer.getSurname(), customer.getUsername());
-        representation.add(selfLink, allCustomers);
-        return representation;
-    }
-
-    private UserResponseDto represent(UserResponseDto customer) {
-//        var selfLink = linkTo(methodOn(RestUsersController.class). (customer.getId())).withSelfRel();
-//        var allCustomers = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allCustomers");
-//        var representation = new CustomerResponseDto(customer.getId(), customer.getName(), customer.getSurname());
-//        representation.add(selfLink, allCustomers);
-        return null;
+    private UserResponseDto represent(UserResponseDto user) {
+        var selfLink = linkTo(methodOn(RestUsersController.class).getUser(user.getId())).withSelfRel();
+        var allAdmins = linkTo(methodOn(RestUsersController.class).getAllUsers()).withRel("all admins");
+        return new UserResponseDto(user.getId(), user.getUsername()).add(selfLink).add(allAdmins);
     }
 
 }

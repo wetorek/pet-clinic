@@ -1,15 +1,14 @@
 package com.clinic.pet.petclinic.controller.rest;
 
+import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
 import com.clinic.pet.petclinic.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +37,13 @@ public class RestCustomerController {
                 .map(this::represent)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/customers")
+    @ResponseStatus(HttpStatus.CREATED)
+    CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
+        var customer = customerService.createCustomer(customerRequestDto);
+        return represent(customer);
     }
 
     private CustomerResponseDto represent(CustomerResponseDto customer) {

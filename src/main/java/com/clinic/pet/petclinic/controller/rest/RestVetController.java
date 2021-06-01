@@ -1,14 +1,12 @@
 package com.clinic.pet.petclinic.controller.rest;
 
+import com.clinic.pet.petclinic.controller.dto.VetRequestDto;
 import com.clinic.pet.petclinic.controller.dto.VetResponseDto;
 import com.clinic.pet.petclinic.service.VetService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -37,6 +35,13 @@ public class RestVetController {
                 .map(this::represent)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/vets")
+    @ResponseStatus(HttpStatus.CREATED)
+    VetResponseDto createVet(@RequestBody VetRequestDto vetRequestDto) {
+        var vet = vetService.createVet(vetRequestDto);
+        return represent(vet);
     }
 
     private VetResponseDto represent(VetResponseDto responseDto) {
