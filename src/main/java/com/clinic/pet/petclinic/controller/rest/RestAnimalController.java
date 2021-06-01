@@ -47,9 +47,9 @@ public class RestAnimalController {
 
     private AnimalResponseDto represent(AnimalResponseDto animal) {
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(animal.getId())).withSelfRel();
-        var allAnimals = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
+        var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
         return new AnimalResponseDto(animal.getId(), animal.getName(), animal.getDateOfBirth(),
-                animal.getSpecies(), animal.getOwnerId()).add(selfLink, allAnimals);
+                animal.getSpecies(), animal.getOwnerId()).add(selfLink, allVets);
     }
 
 }

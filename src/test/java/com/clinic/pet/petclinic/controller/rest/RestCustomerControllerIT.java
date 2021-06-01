@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,8 +49,7 @@ class RestCustomerControllerIT {
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].name", is("Walt")))
                 .andExpect(jsonPath("$[0].surname", is("White")))
-                .andExpect(jsonPath("$[0].links[?(@.rel=='self')].href", hasItem(endsWithIgnoringCase("/api/v1/customers/1"))))
-                .andExpect(jsonPath("$[0].links[?(@.rel=='allCustomers')].href", hasItem(endsWithIgnoringCase("/api/v1/customers"))));
+                .andExpect(jsonPath("$[0].links[?(@.rel=='self')].href", hasItem(endsWithIgnoringCase("/api/v1/customers/1"))));
         verify(customerService, times(1)).getAllCustomers();
     }
 
@@ -66,8 +66,7 @@ class RestCustomerControllerIT {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Walt")))
                 .andExpect(jsonPath("$.surname", is("White")))
-                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/customers/1"))))
-                .andExpect(jsonPath("$._links.allCustomers.href", is(endsWithIgnoringCase("/api/v1/customers"))));
+                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/customers/1"))));
         verify(customerService, times(1)).getCustomerById(1);
     }
 
@@ -90,20 +89,19 @@ class RestCustomerControllerIT {
         var expected = new CustomerResponseDto(1, "Walt", "White", "ww1234");
         when(customerService.createCustomer(any())).thenReturn(expected);
 
-//        mockMvc
-//                .perform(
-//                        post(PATH)
-//                                .contentType("application/json")
-//                                .accept("application/hal+json")
-//                                .content(objectMapper.writeValueAsString(customerRequest)))
-//                .andExpect(status().isCreated())
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(jsonPath("$.id", is(1)))
-//                .andExpect(jsonPath("$.name", is("Walt")))
-//                .andExpect(jsonPath("$.surname", is("White")))
-//                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/customers/1"))))
-//                .andExpect(jsonPath("$._links.allCustomers.href", is(endsWithIgnoringCase("/api/v1/customers"))));
-//        verify(customerService, times(1)).createCustomer(customerRequest);
+        mockMvc
+                .perform(
+                        post(PATH)
+                                .contentType("application/json")
+                                .accept("application/hal+json")
+                                .content(objectMapper.writeValueAsString(customerRequest)))
+                .andExpect(status().isCreated())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Walt")))
+                .andExpect(jsonPath("$.surname", is("White")))
+                .andExpect(jsonPath("$._links.self.href", is(endsWithIgnoringCase("/api/v1/customers/1"))));
+        verify(customerService, times(1)).createCustomer(customerRequest);
     }
 
 }

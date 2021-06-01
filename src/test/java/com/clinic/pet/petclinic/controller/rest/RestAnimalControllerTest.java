@@ -33,14 +33,13 @@ class RestAnimalControllerTest {
         var animalResponse = createAnimalResponse();
         when(animalService.getAllAnimals()).thenReturn(List.of(animalResponse));
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(1)).withSelfRel();
-        var allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
-
+        var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
         var actual = animalController.getAllAnimals();
 
         assertThat(actual).containsExactly(animalResponse);
         assertThat(actual.get(0))
                 .extracting(u -> u.getLinks().toList(), InstanceOfAssertFactories.LIST)
-                .containsExactlyInAnyOrder(selfLink, allAnimals);
+                .containsExactlyInAnyOrder(selfLink, allVets);
         verify(animalService, times(1)).getAllAnimals();
     }
 
@@ -49,13 +48,12 @@ class RestAnimalControllerTest {
         var animalResponse = createAnimalResponse();
         when(animalService.getAnimalById(1)).thenReturn(Optional.of(animalResponse));
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(1)).withSelfRel();
-        var allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
-
+        var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
         var actual = animalController.getAnimal(1);
 
         assertThat(actual).extracting(HttpEntity::getBody).isEqualTo(animalResponse);
         assertThat(actual.getBody()).extracting(u -> u.getLinks().toList(), InstanceOfAssertFactories.LIST)
-                .containsExactlyInAnyOrder(selfLink, allAnimals);
+                .containsExactlyInAnyOrder(selfLink, allVets);
         verify(animalService, times(1)).getAnimalById(1);
     }
 
@@ -73,13 +71,13 @@ class RestAnimalControllerTest {
         var requestDto = new AnimalRequestDto("animal1", LocalDate.of(1999, 7, 12), "CAT", 1);
         var expected = new AnimalResponseDto(1, "animal1", LocalDate.of(1999, 7, 12), "CAT", 1);
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(1)).withSelfRel();
-        var allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
+        var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
         when(animalService.createAnimal(any())).thenReturn(expected);
 
         var actual = animalController.createAnimal(requestDto);
 
         assertThat(actual).isEqualTo(expected);
-        assertThat(actual.getLinks().toList()).containsExactlyInAnyOrder(selfLink, allAnimals);
+        assertThat(actual.getLinks().toList()).containsExactlyInAnyOrder(selfLink, allVets);
         verify(animalService, times(1)).createAnimal(requestDto);
     }
 
