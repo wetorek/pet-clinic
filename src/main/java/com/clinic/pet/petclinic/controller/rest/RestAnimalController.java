@@ -4,13 +4,14 @@ import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.service.AnimalService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -23,11 +24,12 @@ public class RestAnimalController {
     private final AnimalService animalService;
 
     @GetMapping
-    public List<AnimalResponseDto> getAllAnimals() {
+    public CollectionModel<AnimalResponseDto> getAllAnimals() {
         var animals = animalService.getAllAnimals();
-        return animals.stream()
+        var listOfAnimals = animals.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
+        return representCollection(listOfAnimals);
     }
 
     @GetMapping(path = "/{id}")
@@ -52,4 +54,8 @@ public class RestAnimalController {
                 animal.getSpecies(), animal.getOwnerId()).add(selfLink, allVets);
     }
 
+    private CollectionModel<AnimalResponseDto> representCollection(Collection<AnimalResponseDto> animalResponseDtos) {
+        var selfLink = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withSelfRel();
+        return CollectionModel.of(animalResponseDtos, selfLink);
+    }
 }

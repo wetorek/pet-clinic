@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.any;
+import static org.hamcrest.Matchers.endsWithIgnoringCase;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,11 +45,11 @@ class RestCustomerControllerIT {
                 .perform(get(PATH).accept("application/hal+json"))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("Walt")))
-                .andExpect(jsonPath("$[0].surname", is("White")))
-                .andExpect(jsonPath("$[0].links[?(@.rel=='self')].href", hasItem(endsWithIgnoringCase("/api/v1/customers/1"))));
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("_embedded.customerResponseDtoList[0].id", is(1)))
+                .andExpect(jsonPath("_embedded.customerResponseDtoList[0].name", is("Walt")))
+                .andExpect(jsonPath("_embedded.customerResponseDtoList[0].surname", is("White")))
+                .andExpect(jsonPath("_links.self.href", is(endsWithIgnoringCase("/api/v1/customers"))));
         verify(customerService, times(1)).getAllCustomers();
     }
 

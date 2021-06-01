@@ -11,4 +11,5 @@ import org.springframework.hateoas.RepresentationModel;
 public class UserResponseDto extends RepresentationModel<UserResponseDto> {
     private int id;
     private String username;
+    private String role;
 }

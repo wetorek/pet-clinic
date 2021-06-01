@@ -45,11 +45,11 @@ public class RestVisitControllerIT {
         mvc.perform(get(PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].animalId", is(1)))
-                .andExpect(jsonPath("$[0].vetId", is(1)))
-                .andExpect(jsonPath("$[0].customerId", is(1)))
-                .andExpect(jsonPath("$[0].surgeryId", is(1)))
-                .andExpect(jsonPath("$[0].description", is("")));
+                .andExpect(jsonPath("_embedded.visitResponseDtoList[0].animalId", is(1)))
+                .andExpect(jsonPath("_embedded.visitResponseDtoList[0].vetId", is(1)))
+                .andExpect(jsonPath("_embedded.visitResponseDtoList[0].customerId", is(1)))
+                .andExpect(jsonPath("_embedded.visitResponseDtoList[0].surgeryId", is(1)))
+                .andExpect(jsonPath("_embedded.visitResponseDtoList[0].description", is("")));
         verify(visitService, only()).getAllVisits();
     }
 

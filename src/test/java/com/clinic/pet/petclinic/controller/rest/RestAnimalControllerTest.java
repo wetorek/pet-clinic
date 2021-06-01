@@ -37,7 +37,7 @@ class RestAnimalControllerTest {
         var actual = animalController.getAllAnimals();
 
         assertThat(actual).containsExactly(animalResponse);
-        assertThat(actual.get(0))
+        assertThat(actual.getContent().iterator().next())
                 .extracting(u -> u.getLinks().toList(), InstanceOfAssertFactories.LIST)
                 .containsExactlyInAnyOrder(selfLink, allVets);
         verify(animalService, times(1)).getAllAnimals();

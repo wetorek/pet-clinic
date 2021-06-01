@@ -12,4 +12,6 @@ public class UserRequestDto {
     private String username;
     @NotBlank(message = "Password is required")
     private String password;
+    @NotBlank(message = "Role is mandatory")
+    private String role;
 }

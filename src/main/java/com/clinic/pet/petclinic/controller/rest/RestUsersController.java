@@ -1,17 +1,17 @@
 package com.clinic.pet.petclinic.controller.rest;
 
-import com.clinic.pet.petclinic.controller.dto.*;
-import com.clinic.pet.petclinic.service.CustomerService;
+import com.clinic.pet.petclinic.controller.dto.UserRequestDto;
+import com.clinic.pet.petclinic.controller.dto.UserResponseDto;
 import com.clinic.pet.petclinic.service.UserService;
-import com.clinic.pet.petclinic.service.VetService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -31,11 +31,12 @@ public class RestUsersController {
     }
 
     @GetMapping
-    List<UserResponseDto> getAllUsers() {
+    CollectionModel<UserResponseDto> getAllUsers() {
         var users = userService.getAllUsers();
-        return users.stream()
+        var userReponseDtos = users.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
+        return representCollection(userReponseDtos);
     }
 
     @GetMapping("/{id}")
@@ -59,7 +60,11 @@ public class RestUsersController {
     private UserResponseDto represent(UserResponseDto user) {
         var selfLink = linkTo(methodOn(RestUsersController.class).getUser(user.getId())).withSelfRel();
         var allAdmins = linkTo(methodOn(RestUsersController.class).getAllUsers()).withRel("all admins");
-        return new UserResponseDto(user.getId(), user.getUsername()).add(selfLink).add(allAdmins);
+        return new UserResponseDto(user.getId(), user.getUsername(), user.getRole()).add(selfLink).add(allAdmins);
     }
 
+    private CollectionModel<UserResponseDto> representCollection(Collection<UserResponseDto> userResponseDtos) {
+        var selfLink = linkTo(methodOn(RestUsersController.class).getAllUsers()).withSelfRel();
+        return CollectionModel.of(userResponseDtos, selfLink);
+    }
 }

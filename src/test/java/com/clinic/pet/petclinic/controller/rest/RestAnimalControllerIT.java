@@ -4,6 +4,7 @@ import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.service.AnimalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,8 +17,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.any;
+import static org.hamcrest.Matchers.endsWithIgnoringCase;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,13 +46,13 @@ class RestAnimalControllerIT {
                 .perform(get(PATH).accept("application/hal+json"))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("animal1")))
-                .andExpect(jsonPath("$[0].dateOfBirth", is("1999-07-12")))
-                .andExpect(jsonPath("$[0].species", is("CAT")))
-                .andExpect(jsonPath("$[0].ownerId", is(1)))
-                .andExpect(jsonPath("$[0].links[?(@.rel=='self')].href", hasItem(endsWithIgnoringCase("/api/v1/animals/1"))));
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("_embedded.animalResponseDtoList[0].id", is(1)))
+                .andExpect(jsonPath("_embedded.animalResponseDtoList[0].name", is("animal1")))
+                .andExpect(jsonPath("_embedded.animalResponseDtoList[0].dateOfBirth", is("1999-07-12")))
+                .andExpect(jsonPath("_embedded.animalResponseDtoList[0].species", is("CAT")))
+                .andExpect(jsonPath("_embedded.animalResponseDtoList[0].ownerId", is(1)))
+                .andExpect(jsonPath("_links.self.href", is(Matchers.endsWithIgnoringCase("/api/v1/animals"))));
         verify(animalService, times(1)).getAllAnimals();
     }
 

@@ -2,9 +2,7 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.UserRequestDto;
 import com.clinic.pet.petclinic.controller.dto.UserResponseDto;
-import com.clinic.pet.petclinic.controller.dto.VetResponseDto;
 import com.clinic.pet.petclinic.entity.AccountState;
-import com.clinic.pet.petclinic.entity.Role;
 import com.clinic.pet.petclinic.entity.User;
 import com.clinic.pet.petclinic.exceptions.ResourceNotFoundException;
 import com.clinic.pet.petclinic.repository.UserRepository;
@@ -46,11 +44,11 @@ public class UserService {
 
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
-        if (userRepository.existsUserByUsername(userRequestDto.getUsername())) {
+        if (userRepository.existsByUsername(userRequestDto.getUsername())) {
             throw new IllegalArgumentException("This credentials already exist");
         }
         var encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
-        var user = new User(userRequestDto.getUsername(), encodedPassword, Role.ADMIN, AccountState.ACTIVE);
+        var user = mapper.mapToEntity(userRequestDto, encodedPassword, AccountState.ACTIVE);
         userRepository.save(user);
         return mapper.mapToDto(user);
     }
@@ -63,6 +61,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void deactivateUser(int id) {
         log.info("Updating user {} status on deactivated", id);
         var user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);

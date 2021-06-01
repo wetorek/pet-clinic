@@ -4,13 +4,14 @@ import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
 import com.clinic.pet.petclinic.service.CustomerService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -23,11 +24,12 @@ public class RestCustomerController {
     private final CustomerService customerService;
 
     @GetMapping
-    public List<CustomerResponseDto> getAllCustomers() {
+    public CollectionModel<CustomerResponseDto> getAllCustomers() {
         var customers = customerService.getAllCustomers();
-        return customers.stream()
+        var customerResponseDtos = customers.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
+        return representCollection(customerResponseDtos);
     }
 
     @GetMapping(path = "/{id}")
@@ -49,5 +51,10 @@ public class RestCustomerController {
         var selfLink = linkTo(methodOn(RestCustomerController.class).getCustomer(customer.getId())).withSelfRel();
         return new CustomerResponseDto(customer.getId(), customer.getName(), customer.getSurname(),
                 customer.getUsername()).add(selfLink);
+    }
+
+    private CollectionModel<CustomerResponseDto> representCollection(Collection<CustomerResponseDto> customerResponseDtos) {
+        var selfLink = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withSelfRel();
+        return CollectionModel.of(customerResponseDtos, selfLink);
     }
 }

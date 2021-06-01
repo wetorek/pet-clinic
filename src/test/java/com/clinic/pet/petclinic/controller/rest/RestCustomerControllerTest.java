@@ -36,7 +36,7 @@ class RestCustomerControllerTest {
         var actual = customerController.getAllCustomers();
 
         assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
-        assertThat(actual.get(0))
+        assertThat(actual.getContent().iterator().next())
                 .extracting(u -> u.getLinks().toList(), InstanceOfAssertFactories.LIST)
                 .containsExactlyInAnyOrder(selfLink);
         verify(customerService, times(1)).getAllCustomers();

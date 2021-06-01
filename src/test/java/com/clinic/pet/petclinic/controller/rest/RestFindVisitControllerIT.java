@@ -54,9 +54,9 @@ class RestFindVisitControllerIT {
                 )
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(jsonPath("$[0].vet.name", is("Walt")))
-                .andExpect(jsonPath("$[0].vet.surname", is("Kowalski")))
-                .andExpect(jsonPath("$[0].vet.id", is(1)));
+                .andExpect(jsonPath("_embedded.freeSlotVisitResponseDtoList[0].vet.name", is("Walt")))
+                .andExpect(jsonPath("_embedded.freeSlotVisitResponseDtoList[0].vet.surname", is("Kowalski")))
+                .andExpect(jsonPath("_embedded.freeSlotVisitResponseDtoList[0].vet.id", is(1)));
 
         verify(findVisitService, times(1)).findFreeSlots(LOCAL_DATE_TIME_1, LOCAL_DATE_TIME_2);
     }

@@ -1,10 +1,8 @@
 package com.clinic.pet.petclinic;
 
 import com.clinic.pet.petclinic.entity.AccountState;
-import com.clinic.pet.petclinic.entity.Customer;
 import com.clinic.pet.petclinic.entity.Role;
 import com.clinic.pet.petclinic.entity.User;
-import com.clinic.pet.petclinic.repository.CustomerRepository;
 import com.clinic.pet.petclinic.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +20,7 @@ public class AdminInsertCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
         var admin = new User("admin", passwordEncoder.encode("admin"), Role.ADMIN, AccountState.ACTIVE);
-        if (!userRepository.existsUserByUsername("admin")){
+        if (!userRepository.existsByUsername("admin")) {
             userRepository.save(admin);
         }
     }
