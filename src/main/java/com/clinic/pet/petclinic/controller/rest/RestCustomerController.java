@@ -38,7 +38,7 @@ public class RestCustomerController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/customers")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
         var customer = customerService.createCustomer(customerRequestDto);
