@@ -35,7 +35,6 @@ public class RestFindVisitController {
 
     private FreeSlotVisitResponseDto represent(FreeSlotVisitResponseDto freeSlot) {
         var allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withSelfRel();
-        freeSlot.add(allVisits);
-        return freeSlot;
+        return freeSlot.add(allVisits);
     }
 }

@@ -75,9 +75,7 @@ class RestVisitController {
 
     private VisitResponseDto represent(VisitResponseDto responseDto) {
         var selfLink = linkTo(methodOn(RestVisitController.class).getVisit(responseDto.getId())).withSelfRel();
-        var allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withRel("allVisits");
-        responseDto.add(selfLink, allVisits);
-        return responseDto;
+        return responseDto.add(selfLink);
     }
 
 }

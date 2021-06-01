@@ -25,7 +25,6 @@ public class RestCustomerController {
     @GetMapping
     public List<CustomerResponseDto> getAllCustomers() {
         var customers = customerService.getAllCustomers();
-        //todo we do not create link to whole collection- apply to all controllers
         return customers.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
@@ -48,10 +47,7 @@ public class RestCustomerController {
 
     private CustomerResponseDto represent(CustomerResponseDto customer) {
         var selfLink = linkTo(methodOn(RestCustomerController.class).getCustomer(customer.getId())).withSelfRel();
-        var allCustomers = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allCustomers");
-        //todo why?- apply to all controllers
-        var representation = new CustomerResponseDto(customer.getId(), customer.getName(), customer.getSurname(), customer.getUsername());
-        representation.add(selfLink, allCustomers);
-        return representation;
+        return new CustomerResponseDto(customer.getId(), customer.getName(), customer.getSurname(),
+                customer.getUsername()).add(selfLink);
     }
 }

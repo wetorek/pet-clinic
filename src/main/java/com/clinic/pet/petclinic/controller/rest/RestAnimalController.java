@@ -47,10 +47,9 @@ public class RestAnimalController {
 
     private AnimalResponseDto represent(AnimalResponseDto animal) {
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(animal.getId())).withSelfRel();
-        var allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
-        var representation = new AnimalResponseDto(animal.getId(), animal.getName(), animal.getDateOfBirth(), animal.getSpecies(), animal.getOwnerId());
-        representation.add(selfLink, allAnimals);
-        return representation;
+        var allAnimals = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
+        return new AnimalResponseDto(animal.getId(), animal.getName(), animal.getDateOfBirth(),
+                animal.getSpecies(), animal.getOwnerId()).add(selfLink, allAnimals);
     }
 
 }
