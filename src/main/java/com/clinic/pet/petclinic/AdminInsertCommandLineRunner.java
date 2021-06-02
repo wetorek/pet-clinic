@@ -20,8 +20,12 @@ public class AdminInsertCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
         var admin = new User("admin", passwordEncoder.encode("admin"), Role.ADMIN, AccountState.ACTIVE);
+        var blockedUser = new User("admin2", passwordEncoder.encode("admin2"), Role.ADMIN, AccountState.BLOCKED);
         if (!userRepository.existsByUsername("admin")) {
             userRepository.save(admin);
+        }
+        if (!userRepository.existsByUsername("admin2")) {
+            userRepository.save(blockedUser);
         }
     }
 }
