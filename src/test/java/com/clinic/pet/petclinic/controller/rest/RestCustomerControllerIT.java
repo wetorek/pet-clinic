@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -36,6 +37,7 @@ class RestCustomerControllerIT {
     private CustomerService customerService;
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getAllCustomers() throws Exception {
         when(customerService.getAllCustomers()).thenReturn(List.of(
                 new CustomerResponseDto(1, "Walt", "White", "walt123")
@@ -54,6 +56,7 @@ class RestCustomerControllerIT {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getCustomerById() throws Exception {
         when(customerService.getCustomerById(1)).thenReturn(Optional.of(
                 new CustomerResponseDto(1, "Walt", "White", "walt123")
@@ -71,6 +74,7 @@ class RestCustomerControllerIT {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getNotExistingCustomerById() throws Exception {
         when(customerService.getCustomerById(1)).thenReturn(Optional.empty());
 
@@ -84,6 +88,7 @@ class RestCustomerControllerIT {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void createCustomer() throws Exception {
         var customerRequest = new CustomerRequestDto("Walt", "White", "ww1234", "dsadase123");
         var expected = new CustomerResponseDto(1, "Walt", "White", "ww1234");

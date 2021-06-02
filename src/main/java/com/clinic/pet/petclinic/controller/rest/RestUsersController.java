@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,8 +19,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "/users", produces = "application/hal+json")
+@RequestMapping(path = "/api/v1/users", produces = "application/hal+json")
 @AllArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class RestUsersController {
     private final UserService userService;
 

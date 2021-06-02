@@ -5,6 +5,7 @@ import com.clinic.pet.petclinic.service.FindVisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ public class RestFindVisitController {
     private final FindVisitService findVisitService;
 
     @GetMapping(path = "/find")
+    @PreAuthorize("hasAnyRole('CLIENT', 'VET')")
     public CollectionModel<FreeSlotVisitResponseDto> findSlotForVisit(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end

@@ -35,7 +35,7 @@ public class AnimalServiceIT {
 
     @BeforeEach
     void populateDatabase() {
-        var owner = new Customer(1, "jd1234", "pass", Role.CLIENT, AccountState.ACTIVE, "John", "Doe");
+        var owner = new Customer(1, "jd1234", "pass", Role.ROLE_CLIENT, AccountState.ACTIVE, "John", "Doe");
         var animals = List.of(
                 new Animal(1, "animal1", LOCAL_DATE_1, AnimalSpecies.CAT, owner),
                 new Animal(2, "animal2", LOCAL_DATE_2, AnimalSpecies.DOG, owner)

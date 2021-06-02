@@ -3,12 +3,12 @@ package com.clinic.pet.petclinic.controller.rest;
 import com.clinic.pet.petclinic.controller.dto.FreeSlotVisitResponseDto;
 import com.clinic.pet.petclinic.controller.dto.VetResponseDto;
 import com.clinic.pet.petclinic.service.FindVisitService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -31,12 +31,11 @@ class RestFindVisitControllerIT {
     private final String PATH = "/api/v1/timeslots/find";
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockBean
     private FindVisitService findVisitService;
 
     @Test
+    @WithMockUser(roles = "CLIENT")
     void getAllTimeSlots() throws Exception {
         var vetResponseDto = new VetResponseDto(1, "Walt", "Kowalski", "walt123",
                 LocalTime.of(8, 0), LocalTime.of(16, 0));

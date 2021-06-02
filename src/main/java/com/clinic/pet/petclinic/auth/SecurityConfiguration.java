@@ -27,6 +27,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final TokenService tokenService;
     private final CustomUserDetailsService userDetailsService;
+    private final IllegalAccessDeniedHandler illegalAccessDeniedHandler;
 
     @Autowired
     void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,7 +46,8 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(new AuthenticationFilter(userDetailsService(), tokenService), AnonymousAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .accessDeniedHandler(illegalAccessDeniedHandler);
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

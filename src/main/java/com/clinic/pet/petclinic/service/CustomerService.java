@@ -40,7 +40,7 @@ public class CustomerService {
     public CustomerResponseDto createCustomer(CustomerRequestDto requestDto) {
         log.info("Creating a customer");
         var encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-        var customer = mapper.mapToEntity(requestDto, Role.CLIENT, AccountState.ACTIVE, encodedPassword);
+        var customer = mapper.mapToEntity(requestDto, Role.ROLE_CLIENT, AccountState.ACTIVE, encodedPassword);
         var createdCustomer = customerRepository.save(customer);
         log.info("Customer created id: {}", createdCustomer.getId());
         return mapper.mapToDto(createdCustomer);

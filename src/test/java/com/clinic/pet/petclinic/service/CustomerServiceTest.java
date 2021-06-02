@@ -85,7 +85,7 @@ class CustomerServiceTest {
         verify(customerRepository, times(1)).save(customer);
         verify(customerMapper, times(1)).mapToDto(customer);
         verify(customerMapper, times(1))
-                .mapToEntity(customerRequest, Role.CLIENT, AccountState.ACTIVE, "generatedPass");
+                .mapToEntity(customerRequest, Role.ROLE_CLIENT, AccountState.ACTIVE, "generatedPass");
     }
 
     private List<Customer> createCustomers() {

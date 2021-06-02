@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
@@ -23,6 +24,7 @@ public class RestVetController {
     private final VetService vetService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public CollectionModel<VetResponseDto> getAllVets() {
         var vets = vetService.getAllVets();
         var vetResponseDtos = vets.stream()
@@ -32,6 +34,7 @@ public class RestVetController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') OR ( hasRole('VET') AND #id == authentication.principal.userId)")
     public ResponseEntity<VetResponseDto> getVet(@PathVariable @Min(1) int id) {
         return vetService.getVetById(id)
                 .map(this::represent)
@@ -41,6 +44,7 @@ public class RestVetController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     VetResponseDto createVet(@RequestBody VetRequestDto vetRequestDto) {
         var vet = vetService.createVet(vetRequestDto);
         return represent(vet);

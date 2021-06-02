@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +26,7 @@ public class RestAnimalController {
     private final AnimalService animalService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'VET')")
     public CollectionModel<AnimalResponseDto> getAllAnimals() {
         var animals = animalService.getAllAnimals();
         var listOfAnimals = animals.stream()
@@ -33,6 +36,9 @@ public class RestAnimalController {
     }
 
     @GetMapping(path = "/{id}")
+    @PostAuthorize(
+            "hasAnyRole('VET', 'ADMIN') OR " +
+                    "(hasRole('CLIENT') AND ((returnObject.statusCode.value() == 404) OR (returnObject.body.ownerId == authentication.principal.userId)))")
     public ResponseEntity<AnimalResponseDto> getAnimal(@PathVariable @Min(1) int id) {
         return animalService.getAnimalById(id)
                 .map(this::represent)
@@ -42,6 +48,7 @@ public class RestAnimalController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('CLIENT') AND (#animalRequestDto.ownerID == authentication.principal.userId)")
     AnimalResponseDto createAnimal(@Valid @RequestBody AnimalRequestDto animalRequestDto) {
         var animal = animalService.createAnimal(animalRequestDto);
         return represent(animal);

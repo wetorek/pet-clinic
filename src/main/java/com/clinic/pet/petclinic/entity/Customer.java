@@ -33,13 +33,13 @@ public class Customer extends User {
 
     //only for tests
     public Customer(Integer id, String name, String surname) {
-        super(id, null, null, Role.CLIENT, AccountState.ACTIVE);
+        super(id, null, null, Role.ROLE_CLIENT, AccountState.ACTIVE);
         this.name = name;
         this.surname = surname;
     }
 
     public Customer(Integer id, String name, String surname, String username) {
-        super(id, username, null, Role.CLIENT, AccountState.ACTIVE);
+        super(id, username, null, Role.ROLE_CLIENT, AccountState.ACTIVE);
         this.name = name;
         this.surname = surname;
     }

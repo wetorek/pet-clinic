@@ -41,9 +41,9 @@ class CustomerMapperIT {
     @Test
     void mapToEntity() {
         var input = new CustomerRequestDto("Walt", "Kowalski", "Walter", "walt123");
-        var expected = new Customer(null, "Walter", "walt123", Role.CLIENT, AccountState.ACTIVE, "Walt", "Kowalski");
+        var expected = new Customer(null, "Walter", "walt123", Role.ROLE_CLIENT, AccountState.ACTIVE, "Walt", "Kowalski");
 
-        var actual = customerMapper.mapToEntity(input, Role.CLIENT, AccountState.ACTIVE, "walt123");
+        var actual = customerMapper.mapToEntity(input, Role.ROLE_CLIENT, AccountState.ACTIVE, "walt123");
 
         assertThat(actual).isEqualTo(expected);
     }

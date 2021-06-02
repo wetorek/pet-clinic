@@ -32,8 +32,8 @@ class CustomerServiceIT {
     @BeforeEach
     void populateDb() {
         var customers = List.of(
-                new Customer(1, "JDoe", "pass", Role.CLIENT, AccountState.ACTIVE, "John", "Doe"),
-                new Customer(2, "WKowalski", "pass", Role.CLIENT, AccountState.ACTIVE, "Walt", "Kowalski")
+                new Customer(1, "JDoe", "pass", Role.ROLE_CLIENT, AccountState.ACTIVE, "John", "Doe"),
+                new Customer(2, "WKowalski", "pass", Role.ROLE_CLIENT, AccountState.ACTIVE, "Walt", "Kowalski")
         );
         customerRepository.saveAll(customers);
     }

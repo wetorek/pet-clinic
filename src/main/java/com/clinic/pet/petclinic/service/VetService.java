@@ -36,7 +36,7 @@ public class VetService {
     public VetResponseDto createVet(VetRequestDto requestDto) {
         log.info("Creating a vet");
         var encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-        var vet = mapper.mapToEntity(requestDto, Role.VET, AccountState.ACTIVE, encodedPassword);
+        var vet = mapper.mapToEntity(requestDto, Role.ROLE_VET, AccountState.ACTIVE, encodedPassword);
         var createdVet = vetRepository.save(vet);
         log.info("Vet created id: {}", createdVet.getId());
         return mapper.mapToDto(createdVet);

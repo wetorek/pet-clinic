@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ public class RestCustomerController {
     private final CustomerService customerService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'VET')")
     public CollectionModel<CustomerResponseDto> getAllCustomers() {
         var customers = customerService.getAllCustomers();
         var customerResponseDtos = customers.stream()
@@ -33,6 +35,7 @@ public class RestCustomerController {
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'VET')")
     public ResponseEntity<CustomerResponseDto> getCustomer(@PathVariable @Min(1) int id) {
         return customerService.getCustomerById(id)
                 .map(this::represent)
@@ -42,6 +45,7 @@ public class RestCustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
         var customer = customerService.createCustomer(customerRequestDto);
         return represent(customer);

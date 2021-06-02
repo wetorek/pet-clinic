@@ -38,7 +38,7 @@ public class Vet extends User {
     }
 
     public Vet(Integer id, String name, String surname, LocalTime availabilityFrom, LocalTime availabilityTo) {
-        super(id, null, null, Role.VET, AccountState.ACTIVE);
+        super(id, null, null, Role.ROLE_VET, AccountState.ACTIVE);
         this.name = name;
         this.surname = surname;
         this.availabilityFrom = availabilityFrom;
@@ -46,7 +46,7 @@ public class Vet extends User {
     }
 
     public Vet(Integer id, String username, String name, String surname, LocalTime availabilityFrom, LocalTime availabilityTo) {
-        super(id, username, null, Role.VET, AccountState.ACTIVE);
+        super(id, username, null, Role.ROLE_VET, AccountState.ACTIVE);
         this.name = name;
         this.surname = surname;
         this.availabilityFrom = availabilityFrom;
