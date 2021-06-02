@@ -5,6 +5,7 @@ import com.clinic.pet.petclinic.exceptions.ErrorResponse;
 import com.clinic.pet.petclinic.exceptions.IllegalVisitStateException;
 import com.clinic.pet.petclinic.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,6 +47,17 @@ public class RestExceptionAdvice {
         return ErrorResponse.builder()
                 .errorCode("Resource not found")
                 .status(HttpStatus.NOT_FOUND.value())
+                .timestamp(LocalDateTime.now())
+                .errorMessage(ex.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(LockedException.class)
+    ErrorResponse handleBlockedAccount(LockedException ex) {
+        return ErrorResponse.builder()
+                .errorCode("Account locked")
+                .status(HttpStatus.FORBIDDEN.value())
                 .timestamp(LocalDateTime.now())
                 .errorMessage(ex.getMessage())
                 .build();

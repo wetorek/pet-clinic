@@ -2,9 +2,7 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
-import com.clinic.pet.petclinic.entity.Animal;
-import com.clinic.pet.petclinic.entity.AnimalSpecies;
-import com.clinic.pet.petclinic.entity.Customer;
+import com.clinic.pet.petclinic.entity.*;
 import com.clinic.pet.petclinic.repository.AnimalRepository;
 import com.clinic.pet.petclinic.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +19,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 public class AnimalServiceIT {
     private static final LocalDate LOCAL_DATE_1 = LocalDate.of(1999, 7, 12);
     private static final LocalDate LOCAL_DATE_2 = LocalDate.of(2012, 3, 5);
@@ -33,7 +35,7 @@ public class AnimalServiceIT {
 
     @BeforeEach
     void populateDatabase() {
-        var owner = new Customer(1, "John", "Doe");
+        var owner = new Customer(1, "jd1234", "pass", Role.ROLE_CLIENT, AccountState.ACTIVE, "John", "Doe");
         var animals = List.of(
                 new Animal(1, "animal1", LOCAL_DATE_1, AnimalSpecies.CAT, owner),
                 new Animal(2, "animal2", LOCAL_DATE_2, AnimalSpecies.DOG, owner)

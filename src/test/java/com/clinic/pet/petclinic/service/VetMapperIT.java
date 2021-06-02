@@ -17,8 +17,10 @@ class VetMapperIT {
 
     @Test
     void mapEntityToDto() {
-        var vet = new Vet(1, "Walt", "Kowalski", LocalTime.of(8, 0), LocalTime.of(16, 0), null);
-        var expected = new VetResponseDto(1, "Walt", "Kowalski", LocalTime.of(8, 0), LocalTime.of(16, 0));
+        var vet = new Vet(1, "walt123", "Walt", "Kowalski",
+                LocalTime.of(8, 0), LocalTime.of(16, 0));
+        var expected = new VetResponseDto(1, "Walt", "Kowalski", "walt123",
+                LocalTime.of(8, 0), LocalTime.of(16, 0));
 
         var actual = vetMapper.mapToDto(vet);
 

@@ -13,4 +13,7 @@ spring:
     url: jdbc:postgresql://postgres:5432/postgresdb
     username: user
     password: password
-#TODO change it to docker db
+
+#   for local tests:
+#   docker run -it --rm -p 5432:5432 -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=postgresdb postgres:11.5-alpine
+#    url: jdbc:postgresql://localhost:5432/postgresdb

@@ -2,13 +2,16 @@ package com.clinic.pet.petclinic.service;
 
 import com.clinic.pet.petclinic.controller.dto.CustomerRequestDto;
 import com.clinic.pet.petclinic.controller.dto.CustomerResponseDto;
+import com.clinic.pet.petclinic.entity.AccountState;
 import com.clinic.pet.petclinic.entity.Customer;
+import com.clinic.pet.petclinic.entity.Role;
 import com.clinic.pet.petclinic.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +26,8 @@ class CustomerServiceTest {
     private CustomerRepository customerRepository;
     @Mock
     private CustomerMapper customerMapper;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private CustomerService customerService;
 
@@ -66,19 +71,21 @@ class CustomerServiceTest {
 
     @Test
     void createCustomer() {
-        var customerRequest = new CustomerRequestDto("Walt", "White");
+        var customerRequest = new CustomerRequestDto("Walt", "White", "ww123", "pass123");
         var customer = new Customer(1, "Walt", "White");
-        var expectedResponse = new CustomerResponseDto(1, "Walt", "White");
-        when(customerMapper.mapToEntity(any())).thenReturn(customer);
+        var expectedResponse = new CustomerResponseDto(1, "Walt", "White", "ww123");
+        when(customerMapper.mapToEntity(any(), any(), any(), any())).thenReturn(customer);
         when(customerRepository.save(any())).thenReturn(customer);
         when(customerMapper.mapToDto(any())).thenReturn(expectedResponse);
+        when(passwordEncoder.encode(any())).thenReturn("generatedPass");
 
         var actual = customerService.createCustomer(customerRequest);
 
         assertThat(actual).isEqualTo(expectedResponse);
         verify(customerRepository, times(1)).save(customer);
         verify(customerMapper, times(1)).mapToDto(customer);
-        verify(customerMapper, times(1)).mapToEntity(customerRequest);
+        verify(customerMapper, times(1))
+                .mapToEntity(customerRequest, Role.ROLE_CLIENT, AccountState.ACTIVE, "generatedPass");
     }
 
     private List<Customer> createCustomers() {
@@ -90,8 +97,8 @@ class CustomerServiceTest {
 
     private List<CustomerResponseDto> createCustomerResponses() {
         return List.of(
-                new CustomerResponseDto(1, "John", "Doe"),
-                new CustomerResponseDto(2, "Walter", "White")
+                new CustomerResponseDto(1, "John", "Doe", "jd123"),
+                new CustomerResponseDto(2, "Walter", "White", "ww1234")
         );
     }
 }

@@ -29,25 +29,23 @@ class RestCustomerControllerTest {
 
     @Test
     void getAllCustomers() {
-        var expected = List.of(new CustomerResponseDto(1, "Walt", "White"));
+        var expected = List.of(new CustomerResponseDto(1, "Walt", "White", "walt123"));
         Link selfLink = linkTo(methodOn(RestCustomerController.class).getCustomer(1)).withSelfRel();
-        Link allCustomers = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allCustomers");
         when(customerService.getAllCustomers()).thenReturn(expected);
 
         var actual = customerController.getAllCustomers();
 
         assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
-        assertThat(actual.get(0))
+        assertThat(actual.getContent().iterator().next())
                 .extracting(u -> u.getLinks().toList(), InstanceOfAssertFactories.LIST)
-                .containsExactlyInAnyOrder(selfLink, allCustomers);
+                .containsExactlyInAnyOrder(selfLink);
         verify(customerService, times(1)).getAllCustomers();
     }
 
     @Test
     void getCustomerById() {
-        var expected = new CustomerResponseDto(1, "Walt", "White");
+        var expected = new CustomerResponseDto(1, "Walt", "White", "walt123");
         var selfLink = linkTo(methodOn(RestCustomerController.class).getCustomer(1)).withSelfRel();
-        var allCustomers = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allCustomers");
         when(customerService.getCustomerById(1)).thenReturn(Optional.of(expected));
 
         var actual = customerController.getCustomer(1);
@@ -55,7 +53,7 @@ class RestCustomerControllerTest {
         assertThat(actual).extracting(ResponseEntity::getBody).isEqualTo(expected);
         assertThat(actual.getBody())
                 .extracting(u -> u.getLinks().toList(), InstanceOfAssertFactories.LIST)
-                .containsExactlyInAnyOrder(selfLink, allCustomers);
+                .containsExactlyInAnyOrder(selfLink);
         verify(customerService, times(1)).getCustomerById(1);
     }
 
@@ -70,16 +68,15 @@ class RestCustomerControllerTest {
 
     @Test
     void createCustomer() {
-        var customerRequest = new CustomerRequestDto("Walt", "White");
-        var expected = new CustomerResponseDto(1, "Walt", "White");
+        var customerRequest = new CustomerRequestDto("Walt", "White", "ww", "qwerty");
+        var expected = new CustomerResponseDto(1, "Walt", "White", "ww");
         var selfLink = linkTo(methodOn(RestCustomerController.class).getCustomer(1)).withSelfRel();
-        var allCustomers = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allCustomers");
         when(customerService.createCustomer(any())).thenReturn(expected);
 
         var actual = customerController.createCustomer(customerRequest);
 
         assertThat(actual).isEqualTo(expected);
-        assertThat(actual.getLinks().toList()).containsExactlyInAnyOrder(selfLink, allCustomers);
+        assertThat(actual.getLinks().toList()).containsExactlyInAnyOrder(selfLink);
         verify(customerService, times(1)).createCustomer(customerRequest);
     }
 

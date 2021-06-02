@@ -5,14 +5,24 @@
 -- DROP TABLE surgeries cascade;
 -- DROP TABLE flyway_schema_history cascade;
 
-CREATE TABLE IF NOT EXISTS customers
+create TABLE IF NOT EXISTS USERS
+(
+    id            serial primary key not null,
+    password      varchar(255)       not null,
+    role          varchar(255)       not null,
+    account_state varchar(255)       not null,
+    username      varchar(255)       not null unique
+);
+
+create TABLE IF NOT EXISTS customers
 (
     id      serial primary key not null,
     name    varchar(255)       not null,
-    surname varchar(255)       not null
+    surname varchar(255)       not null,
+    FOREIGN KEY (id) references USERS (id)
 );
 
-CREATE TABLE IF NOT EXISTS animals
+create TABLE IF NOT EXISTS animals
 (
     id            serial primary key not null,
     date_of_birth date,
@@ -21,21 +31,22 @@ CREATE TABLE IF NOT EXISTS animals
     owner_id      integer            not null,
     FOREIGN KEY (owner_id) REFERENCES customers (id)
 );
-CREATE TABLE IF NOT EXISTS vets
+create TABLE IF NOT EXISTS vets
 (
     id                serial primary key not null,
     image             oid,
     name              varchar(255)       not null,
     surname           varchar(255)       not null,
     availability_from time,
-    availability_to   time
+    availability_to   time,
+    FOREIGN KEY (id) references USERS (id)
 );
-CREATE TABLE IF NOT EXISTS surgeries
+create TABLE IF NOT EXISTS surgeries
 (
     id   serial primary key not null,
     name varchar(255)       not null
 );
-CREATE TABLE IF NOT EXISTS visits
+create TABLE IF NOT EXISTS visits
 (
     id          serial primary key not null,
     description varchar(255),

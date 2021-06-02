@@ -10,10 +10,11 @@ import java.time.LocalTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-public class VetResponseDto extends RepresentationModel<VisitResponseDto> {
+public class VetResponseDto extends RepresentationModel<VetResponseDto> {
     private int id;
     private String name;
     private String surname;
+    private String username;
     private LocalTime availabilityFrom;
     private LocalTime availabilityTo;
 }

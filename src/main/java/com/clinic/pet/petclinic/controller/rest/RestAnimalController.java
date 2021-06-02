@@ -4,13 +4,16 @@ import com.clinic.pet.petclinic.controller.dto.AnimalRequestDto;
 import com.clinic.pet.petclinic.controller.dto.AnimalResponseDto;
 import com.clinic.pet.petclinic.service.AnimalService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -23,14 +26,19 @@ public class RestAnimalController {
     private final AnimalService animalService;
 
     @GetMapping
-    public List<AnimalResponseDto> getAllAnimals() {
+    @PreAuthorize("hasAnyRole('ADMIN', 'VET')")
+    public CollectionModel<AnimalResponseDto> getAllAnimals() {
         var animals = animalService.getAllAnimals();
-        return animals.stream()
+        var listOfAnimals = animals.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
+        return representCollection(listOfAnimals);
     }
 
     @GetMapping(path = "/{id}")
+    @PostAuthorize(
+            "hasAnyRole('VET', 'ADMIN') OR " +
+                    "(hasRole('CLIENT') AND ((returnObject.statusCode.value() == 404) OR (returnObject.body.ownerId == authentication.principal.userId)))")
     public ResponseEntity<AnimalResponseDto> getAnimal(@PathVariable @Min(1) int id) {
         return animalService.getAnimalById(id)
                 .map(this::represent)
@@ -40,6 +48,7 @@ public class RestAnimalController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('CLIENT') AND (#animalRequestDto.ownerID == authentication.principal.userId)")
     AnimalResponseDto createAnimal(@Valid @RequestBody AnimalRequestDto animalRequestDto) {
         var animal = animalService.createAnimal(animalRequestDto);
         return represent(animal);
@@ -47,10 +56,13 @@ public class RestAnimalController {
 
     private AnimalResponseDto represent(AnimalResponseDto animal) {
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(animal.getId())).withSelfRel();
-        var allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
-        var representation = new AnimalResponseDto(animal.getId(), animal.getName(), animal.getDateOfBirth(), animal.getSpecies(), animal.getOwnerId());
-        representation.add(selfLink, allAnimals);
-        return representation;
+        var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
+        return new AnimalResponseDto(animal.getId(), animal.getName(), animal.getDateOfBirth(),
+                animal.getSpecies(), animal.getOwnerId()).add(selfLink, allVets);
     }
 
+    private CollectionModel<AnimalResponseDto> representCollection(Collection<AnimalResponseDto> animalResponseDtos) {
+        var selfLink = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withSelfRel();
+        return CollectionModel.of(animalResponseDtos, selfLink);
+    }
 }

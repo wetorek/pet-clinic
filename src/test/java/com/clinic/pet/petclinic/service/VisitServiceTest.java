@@ -124,7 +124,7 @@ class VisitServiceTest {
 
         Customer customer = new Customer(1, "John", "Doe");
         Animal animal = new Animal(1, "animalName", LOCAL_DATE_1, AnimalSpecies.HAMSTER, customer);
-        Vet vet = new Vet(1, "Wiliam", "Williams", LocalTime.of(10, 0), LocalTime.of(18, 0), null);
+        Vet vet = new Vet(1, "Wiliam", "Williams", LocalTime.of(10, 0), LocalTime.of(18, 0));
         Surgery surgery = new Surgery(1, "surgery1");
 
         Visit expected = new Visit(1, dateTime, Duration.ofMinutes(15),
@@ -227,7 +227,7 @@ class VisitServiceTest {
     private Visit createVisit() {
         var owner = new Customer(1, "John", "Doe");
         var animal = new Animal(1, "animal1", LOCAL_DATE_1, AnimalSpecies.CAT, owner);
-        var vet = new Vet(1, "Walt", "Kowalski", LocalTime.of(8, 0), LocalTime.of(16, 0), null);
+        var vet = new Vet(1, "Walt", "Kowalski", LocalTime.of(8, 0), LocalTime.of(16, 0));
         var surgery = new Surgery(1, "Surgery 1");
         return new Visit(1, LOCAL_DATE_TIME_1, Duration.ofMinutes(20), Status.PLANNED, BigDecimal.TEN, "", animal, owner, vet, surgery);
     }
