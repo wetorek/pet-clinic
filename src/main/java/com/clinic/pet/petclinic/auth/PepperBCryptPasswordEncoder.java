@@ -1,5 +1,6 @@
 package com.clinic.pet.petclinic.auth;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -18,7 +19,7 @@ public class PepperBCryptPasswordEncoder extends BCryptPasswordEncoder {
         if (rawPassword == null) {
             throw new IllegalArgumentException("rawPassword cannot be null");
         }
-        return super.encode(rawPassword + pepper);
+        return super.encode(pepperPassword(rawPassword));
     }
 
     @Override
@@ -26,6 +27,10 @@ public class PepperBCryptPasswordEncoder extends BCryptPasswordEncoder {
         if (rawPassword == null) {
             throw new IllegalArgumentException("rawPassword cannot be null");
         }
-        return super.matches(rawPassword + pepper, encodedPassword);
+        return super.matches(pepperPassword(rawPassword), encodedPassword);
+    }
+
+    private CharSequence pepperPassword(CharSequence rawPassword) {
+        return new String(Base64.encodeBase64((rawPassword + pepper).getBytes()));
     }
 }
