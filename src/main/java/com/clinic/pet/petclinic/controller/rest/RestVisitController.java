@@ -48,14 +48,24 @@ class RestVisitController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/vet/{id}")
-    @PreAuthorize("hasRole('ADMIN') OR (hasRole('VET') AND (authentication.principal.userId == #id))")
-    public CollectionModel<VisitResponseDto> getAllVisitsWithVet(@PathVariable @Min(1) int id) {
-        var visits = visitService.allVisitsWithVet(id);
+    @GetMapping("/vet")
+    @PreAuthorize("hasRole('ADMIN') OR (hasRole('VET') AND #vetId == authentication.principal.userId)")
+    public CollectionModel<VisitResponseDto> getAllVisitsWithVet(@RequestParam @Min(1) int vetId) {
+        var visits = visitService.allVisitsWithVet(vetId);
         var visitReponseDtos = visits.stream()
                 .map(this::represent)
                 .collect(Collectors.toList());
-        return representCollectionGetAllByVet(visitReponseDtos, id);
+        return representCollectionGetAllByVet(visitReponseDtos, vetId);
+    }
+
+    @GetMapping("/customer")
+    @PreAuthorize("hasRole('ADMIN') OR (hasRole('CLIENT') AND #customerId == authentication.principal.userId)")
+    public CollectionModel<VisitResponseDto> getVisitsByCustomer(@RequestParam @Min(1) int customerId) {
+        var result = visitService.getCustomersVisits(customerId)
+                .stream()
+                .map(this::represent)
+                .collect(Collectors.toList());
+        return representCollectionGetAll(result);
     }
 
     @PostMapping

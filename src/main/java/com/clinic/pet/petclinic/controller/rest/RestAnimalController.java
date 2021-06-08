@@ -46,6 +46,16 @@ public class RestAnimalController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping(path = "/customer")
+    @PreAuthorize("hasRole('ADMIN') OR (hasRole('CLIENT') AND #customerId == authentication.principal.userId)")
+    public CollectionModel<AnimalResponseDto> getAnimalsByCustomer(@RequestParam @Min(1) int customerId) {
+        var result = animalService.getAnimalsByCustomerId(customerId)
+                .stream()
+                .map(this::represent)
+                .collect(Collectors.toList());
+        return representCollection(result);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('CLIENT') AND (#animalRequestDto.ownerID == authentication.principal.userId)")

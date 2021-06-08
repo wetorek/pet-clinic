@@ -21,8 +21,8 @@ import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 @Service
 public class TokenService {
     private final SecretKey secretKey = Keys.secretKeyFor(HS512);
-    @Value("${security.jwt.token.expire-length:3600000}")
-    private final long validityInMilliseconds = 3600000; // 1h
+    @Value("${app.security.jwt.expire-length}")
+    private long validityInMilliseconds; // 1h
 
     String getUsernameFromToken(String token) {
         return getAllClaimsFromToken(token).getSubject();

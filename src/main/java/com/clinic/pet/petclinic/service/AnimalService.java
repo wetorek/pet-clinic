@@ -47,4 +47,10 @@ public class AnimalService {
         return mapper.mapToDto(createdAnimal);
     }
 
+    @Transactional(readOnly = true)
+    public List<AnimalResponseDto> getAnimalsByCustomerId(int id) {
+        log.info("Getting customer's animals");
+        var animals = animalRepository.getAllByOwnerId(id);
+        return mapper.mapListToDto(animals);
+    }
 }

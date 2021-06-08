@@ -48,6 +48,13 @@ public class VisitService {
                 .map(visitMapper::mapToDto);
     }
 
+    @Transactional(readOnly = true)
+    public List<VisitResponseDto> getCustomersVisits(int id) {
+        log.info("Getting customer's visits");
+        var visits = visitRepository.getAllByCustomerId(id);
+        return visitMapper.mapListToDto(visits);
+    }
+
     @Transactional
     public VisitResponseDto createVisit(VisitRequestDto requestDto) {
         log.info("Creating a Visit");
