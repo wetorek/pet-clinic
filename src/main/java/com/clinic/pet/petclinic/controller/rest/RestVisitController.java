@@ -68,22 +68,24 @@ class RestVisitController {
     }
 
     @PatchMapping(path = "/{id}/status")
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('VET')")
-    public VisitResponseDto changeVisitStatus(@PathVariable @Min(1) int id, @RequestBody VisitSetStatusRequestDto requestDto) {
+    @PreAuthorize("hasAnyRole('VET', 'ADMIN')")
+    public VisitResponseDto changeVisitStatus(@PathVariable @Min(1) int id,
+                                              @Valid @RequestBody VisitSetStatusRequestDto requestDto) {
         var visit = visitService.changeVisitStatus(id, requestDto);
         return represent(visit);
     }
 
     @PatchMapping(path = "/{id}/description")
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('VET')")
-    public VisitResponseDto changeDescriptionVisit(@PathVariable @Min(1) int id, @RequestBody VisitSetDescriptionRequestDto requestDto) {
+    @PreAuthorize("hasAnyRole('VET', 'ADMIN')")
+    public VisitResponseDto changeDescriptionVisit(@PathVariable @Min(1) int id,
+                                                   @Valid @RequestBody VisitSetDescriptionRequestDto requestDto) {
         var visit = visitService.changeDescription(id, requestDto);
         return represent(visit);
     }
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('VET')")
+    @PreAuthorize("hasAnyRole('VET', 'ADMIN')")
     void delete(@PathVariable @Min(1) int id) {
         visitService.delete(id);
     }

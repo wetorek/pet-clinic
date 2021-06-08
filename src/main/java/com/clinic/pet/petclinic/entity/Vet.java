@@ -1,7 +1,6 @@
 package com.clinic.pet.petclinic.entity;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.PersistenceConstructor;
@@ -17,7 +16,6 @@ import java.util.List;
 @Table(name = "vets")
 @Entity
 @Data
-@AllArgsConstructor
 public class Vet extends User {
     @NotNull
     private String name;
