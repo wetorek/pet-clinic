@@ -25,4 +25,6 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
 
     @Query("select v from Visit v where v.vet.id = :id")
     List<Visit> vetsVisits(@Param("id") Integer id);
+
+    List<Visit> getAllByCustomerId(int id);
 }
