@@ -66,13 +66,15 @@ public class RestAnimalController {
 
     private AnimalResponseDto represent(AnimalResponseDto animal) {
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAnimal(animal.getId())).withSelfRel();
-        var allVets = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
+        var allAnimals = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withRel("allAnimals");
+        var owner = linkTo(methodOn(RestCustomerController.class).getCustomer(animal.getOwnerId())).withRel("owner");
         return new AnimalResponseDto(animal.getId(), animal.getName(), animal.getDateOfBirth(),
-                animal.getSpecies(), animal.getOwnerId()).add(selfLink, allVets);
+                animal.getSpecies(), animal.getOwnerId()).add(selfLink, allAnimals, owner);
     }
 
     private CollectionModel<AnimalResponseDto> representCollection(Collection<AnimalResponseDto> animalResponseDtos) {
         var selfLink = linkTo(methodOn(RestAnimalController.class).getAllAnimals()).withSelfRel();
-        return CollectionModel.of(animalResponseDtos, selfLink);
+        var allOwners = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allOwners");
+        return CollectionModel.of(animalResponseDtos, selfLink, allOwners);
     }
 }

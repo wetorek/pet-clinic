@@ -102,12 +102,17 @@ class RestVisitController {
 
     private VisitResponseDto represent(VisitResponseDto responseDto) {
         var selfLink = linkTo(methodOn(RestVisitController.class).getVisit(responseDto.getId())).withSelfRel();
-        return responseDto.add(selfLink);
+        var vet = linkTo(methodOn(RestVetController.class).getVet(responseDto.getVetId())).withRel("vet");
+        var customer = linkTo(methodOn(RestCustomerController.class).getCustomer(responseDto.getCustomerId())).withRel("owner");
+        var animal = linkTo(methodOn(RestAnimalController.class).getAnimal(responseDto.getAnimalId())).withRel("animal");
+        var allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withRel("all visits");
+        return responseDto.add(selfLink, vet, customer, animal ,allVisits);
     }
 
     private CollectionModel<VisitResponseDto> representCollectionGetAll(Collection<VisitResponseDto> visitResponseDtos) {
         var selfLink = linkTo(methodOn(RestVisitController.class).getAllVisits()).withSelfRel();
-        return CollectionModel.of(visitResponseDtos, selfLink);
+        var vets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("vets");
+        return CollectionModel.of(visitResponseDtos, selfLink, vets);
     }
 
     private CollectionModel<VisitResponseDto> representCollectionGetAllByVet(
