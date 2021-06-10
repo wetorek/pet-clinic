@@ -1,9 +1,10 @@
 package com.clinic.pet.petclinic.entity;
 
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
@@ -16,6 +17,8 @@ import java.util.List;
 @Table(name = "vets")
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vet extends User {
     @NotNull
     private String name;
@@ -30,10 +33,6 @@ public class Vet extends User {
 
     @OneToMany(mappedBy = "vet")
     private List<Visit> visitList;
-
-    @PersistenceConstructor
-    public Vet() {
-    }
 
     public Vet(Integer id, String name, String surname, LocalTime availabilityFrom, LocalTime availabilityTo) {
         super(id, null, null, Role.ROLE_VET, AccountState.ACTIVE);

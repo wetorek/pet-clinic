@@ -1,9 +1,13 @@
 package com.clinic.pet.petclinic.auth;
 
+import com.clinic.pet.petclinic.controller.dto.LogoutRequestDto;
+import com.clinic.pet.petclinic.entity.BlacklistedToken;
 import com.clinic.pet.petclinic.entity.Role;
+import com.clinic.pet.petclinic.repository.BlacklistedTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,8 +23,10 @@ import java.util.stream.Collectors;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService {
     private final SecretKey secretKey = Keys.secretKeyFor(HS512);
+    private final BlacklistedTokenRepository blackListedTokenRepository;
     @Value("${app.security.jwt.expire-length:3600000}")
     private long validityInMilliseconds; // 1h
 
@@ -47,6 +53,14 @@ public class TokenService {
     boolean isValidForUser(String token, UserDetails userDetails) {
         var username = getUsernameFromToken(token);
         return !isTokenExpired(token) && username.equals(userDetails.getUsername());
+    }
+
+    public void blackListToken(LogoutRequestDto logoutRequestDto) {
+        blackListedTokenRepository.save(new BlacklistedToken(logoutRequestDto.getJwt()));
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        return blackListedTokenRepository.existsById(token);
     }
 
     private Boolean isTokenExpired(String token) {

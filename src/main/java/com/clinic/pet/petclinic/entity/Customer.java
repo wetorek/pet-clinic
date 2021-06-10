@@ -4,7 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Customer extends User {
     @NotNull
     private String name;
@@ -26,10 +27,6 @@ public class Customer extends User {
     private List<Animal> animalList;
     @OneToMany(mappedBy = "customer")
     private List<Visit> visitList;
-
-    @PersistenceConstructor
-    public Customer() {
-    }
 
     //only for tests
     public Customer(Integer id, String name, String surname) {

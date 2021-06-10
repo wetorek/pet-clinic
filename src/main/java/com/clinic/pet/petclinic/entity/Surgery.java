@@ -2,7 +2,7 @@ package com.clinic.pet.petclinic.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Surgery {
 
     @Id
@@ -19,7 +20,4 @@ public class Surgery {
     @NotBlank
     private String name;
 
-    @PersistenceConstructor
-    public Surgery() {
-    }
 }

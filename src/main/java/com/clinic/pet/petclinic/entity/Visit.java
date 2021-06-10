@@ -3,8 +3,8 @@ package com.clinic.pet.petclinic.entity;
 import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.TypeDef;
-import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @TypeDef(typeClass = PostgreSQLIntervalType.class, defaultForType = Duration.class)
 public class Visit {
     @Id
@@ -49,7 +50,4 @@ public class Visit {
     @JoinColumn(name = "surgery_id", nullable = false)
     private Surgery surgery;
 
-    @PersistenceConstructor
-    protected Visit() {
-    }
 }

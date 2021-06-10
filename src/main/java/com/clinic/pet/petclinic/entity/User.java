@@ -2,7 +2,7 @@ package com.clinic.pet.petclinic.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
@@ -28,16 +29,10 @@ public class User {
     @NotNull
     private AccountState accountState;
 
-    @PersistenceConstructor
-    public User() {
-    }
-
     public User(String username, String password, Role role, AccountState accountState) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.accountState = accountState;
     }
-
-
 }

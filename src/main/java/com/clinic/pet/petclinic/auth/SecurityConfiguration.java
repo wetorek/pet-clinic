@@ -46,6 +46,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated();
         http
                 .addFilterBefore(new AuthenticationFilter(userDetailsService(), tokenService), AnonymousAuthenticationFilter.class)
+                .addFilterBefore(new TokenBlacklistFilter(tokenService), AnonymousAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .accessDeniedHandler(illegalAccessDeniedHandler);

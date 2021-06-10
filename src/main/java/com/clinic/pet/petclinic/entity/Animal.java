@@ -3,7 +3,7 @@ package com.clinic.pet.petclinic.entity;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +31,6 @@ public class Animal {
 
     @OneToMany(mappedBy = "animal")
     private List<Visit> visitList;
-
-    @PersistenceConstructor
-    public Animal() {
-    }
 
     public Animal(Integer id, String name, LocalDate dateOfBirth, AnimalSpecies species, Customer owner) {
         this.id = id;
