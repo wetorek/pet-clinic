@@ -53,7 +53,9 @@ public class RestVetController {
     private VetResponseDto represent(VetResponseDto responseDto) {
         var selfLink = linkTo(methodOn(RestVetController.class).getVet(responseDto.getId())).withSelfRel();
         var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("allVets");
-        return responseDto.add(selfLink, allVets);
+        var allVetsVisit = linkTo(methodOn(RestVisitController.class).getAllVisitsWithVet(responseDto.getId())).withRel("vet's visit");
+        var allVisits = linkTo(methodOn(RestVisitController.class).getAllVisits()).withRel("all visits");
+        return responseDto.add(selfLink, allVetsVisit, allVisits, allVets);
     }
 
     private CollectionModel<VetResponseDto> representCollection(Collection<VetResponseDto> vetResponseDtos) {

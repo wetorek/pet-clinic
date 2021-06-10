@@ -53,8 +53,11 @@ public class RestCustomerController {
 
     private CustomerResponseDto represent(CustomerResponseDto customer) {
         var selfLink = linkTo(methodOn(RestCustomerController.class).getCustomer(customer.getId())).withSelfRel();
+        var allCustomers = linkTo(methodOn(RestCustomerController.class).getAllCustomers()).withRel("allCustomers");
+        var customersAnimals = linkTo(methodOn(RestAnimalController.class).getAnimalsByCustomer(customer.getId())).withRel("customer's animals");
+        var customersVisits = linkTo(methodOn(RestVisitController.class).getVisitsByCustomer(customer.getId())).withRel("customer's visits");
         return new CustomerResponseDto(customer.getId(), customer.getName(), customer.getSurname(),
-                customer.getUsername()).add(selfLink);
+                customer.getUsername()).add(selfLink, customersAnimals, customersVisits ,allCustomers);
     }
 
     private CollectionModel<CustomerResponseDto> representCollectionCustomers(Collection<CustomerResponseDto> customerResponseDtos) {

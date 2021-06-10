@@ -62,7 +62,8 @@ public class RestUsersController {
     private UserResponseDto represent(UserResponseDto user) {
         var selfLink = linkTo(methodOn(RestUsersController.class).getUser(user.getId())).withSelfRel();
         var allAdmins = linkTo(methodOn(RestUsersController.class).getAllUsers()).withRel("all admins");
-        return new UserResponseDto(user.getId(), user.getUsername(), user.getRole()).add(selfLink).add(allAdmins);
+        var allVets = linkTo(methodOn(RestVetController.class).getAllVets()).withRel("all vets");
+        return new UserResponseDto(user.getId(), user.getUsername(), user.getRole()).add(selfLink).add(allAdmins).add(allVets);
     }
 
     private CollectionModel<UserResponseDto> representCollection(Collection<UserResponseDto> userResponseDtos) {
