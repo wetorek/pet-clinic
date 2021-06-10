@@ -13,9 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.clinic.pet.petclinic.auth.Constants.BEARER;
+
 @AllArgsConstructor
 public class TokenBlacklistFilter extends OncePerRequestFilter {
-    private static final String BEARER = "Bearer ";
     private final TokenService tokenService;
 
     @Override

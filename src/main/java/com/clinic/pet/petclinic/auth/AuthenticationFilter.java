@@ -16,9 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.clinic.pet.petclinic.auth.Constants.BEARER;
+
 @AllArgsConstructor
 class AuthenticationFilter extends OncePerRequestFilter {
-    private static final String BEARER = "Bearer ";
     private final UserDetailsService userDetailsService;
     private final TokenService tokenService;
 
