@@ -46,4 +46,4 @@ We used:
 - Spring Data JPA
 - Mapstruct
 - JSONWebToken
-- MockMVC, Mockito, JUnit5 for testing
+- MockMVC, Mockito, AssertJ, JUnit5 for testing
